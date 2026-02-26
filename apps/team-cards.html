@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление командами</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --ds-accent-blue:        #3B82F6;
+            --ds-accent-blue-subtle: #DBEAFE;
+            --ds-bg-card:            #FFFFFF;
+            --ds-bg-muted:           #F0F2F5;
+            --ds-bg-primary:         #FAFBFC;
+            --ds-bg-secondary:       #F5F7F9;
+            --ds-border-default:     #D1D5DB;
+            --ds-border-light:       #E5E9EF;
+            --ds-radius-lg:          16px;
+            --ds-radius-md:          10px;
+            --ds-radius-pill:        999px;
+            --ds-radius-sm:          6px;
+            --ds-success:            #10B981;
+            --ds-success-light:      #D1FAE5;
+            --ds-error:              #EF4444;
+            --ds-error-light:        #FEE2E2;
+            --ds-text-inverse:       #FFFFFF;
+            --ds-text-muted:         #9BA3AF;
+            --ds-text-primary:       #1A1D21;
+            --ds-text-secondary:     #5C6370;
+            --ds-warning:            #F59E0B;
+            --ds-warning-light:      #FEF3C7;
+
+            /* Role palette */
+            --role-backend-bg:    #FFF7ED;
+            --role-backend-color: #EA580C;
+            --role-frontend-bg:   #D1FAE5;
+            --role-frontend-color:#059669;
+            --role-analytics-bg:  #DBEAFE;
+            --role-analytics-color:#2563EB;
+            --role-testing-bg:    #FEF3C7;
+            --role-testing-color: #D97706;
+            --role-design-bg:     #FCE7F3;
+            --role-design-color:  #BE185D;
+            --role-ml-bg:         #EDE9FE;
+            --role-ml-color:      #7C3AED;
+            --role-delivery-bg:   #FEE2E2;
+            --role-delivery-color:#DC2626;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--ds-bg-primary);
+            min-height: 100vh;
+            color: var(--ds-text-primary);
+        }
+
+        /* ─── NAVBAR ──────────────────────────────────────── */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            padding: 0 32px;
+            background: var(--ds-bg-card);
+            border-bottom: 1px solid var(--ds-border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ds-text-primary);
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ─── CONTENT ──────────────────────────────────────── */
+        .content {
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ─── CONTROLS ─────────────────────────────────────── */
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--ds-bg-card);
+            border: 1px solid var(--ds-border-light);
+            border-radius: var(--ds-radius-lg);
+        }
+        .controls-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .controls-hint {
+            font-size: 13px;
+            color: var(--ds-text-muted);
+        }
+        .controls-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 13px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: var(--ds-radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: box-shadow 0.15s, border-color 0.15s, transform 0.12s;
+            text-decoration: none;
+            background: #ffffff;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        /* Загрузить Excel — синий акцент */
+        .btn-primary {
+            background: linear-gradient(135deg, #ffffff 40%, rgba(59, 130, 246, 0.07) 100%);
+            color: #1D4ED8;
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+        .btn-primary:hover { border-color: rgba(59, 130, 246, 0.4); }
+
+        /* Сохранить — зелёный, той же логики */
+        .btn-success {
+            background: linear-gradient(135deg, #ffffff 40%, rgba(16, 185, 129, 0.07) 100%);
+            color: #065F46;
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+        .btn-success:hover { border-color: rgba(16, 185, 129, 0.4); }
+
+        /* Шаблон — нейтральный */
+        .btn-secondary {
+            background: #ffffff;
+            color: var(--ds-text-secondary);
+            border-color: var(--ds-border-light);
+        }
+        .btn-secondary:hover { border-color: var(--ds-border-default); }
+        #fileInput { display: none; }
+
+        /* ─── STATUS ───────────────────────────────────────── */
+        .status-message {
+            padding: 10px 16px;
+            border-radius: var(--ds-radius-md);
+            font-size: 13px;
+            font-weight: 400;
+            display: none;
+            border: 1px solid transparent;
+        }
+        .status-message.success {
+            display: block;
+            background: linear-gradient(135deg, #ffffff 30%, rgba(16, 185, 129, 0.06) 100%);
+            border-color: rgba(16, 185, 129, 0.22);
+            color: #065F46;
+        }
+        .status-message.error {
+            display: block;
+            background: linear-gradient(135deg, #ffffff 30%, rgba(239, 68, 68, 0.06) 100%);
+            border-color: rgba(239, 68, 68, 0.22);
+            color: #7F1D1D;
+        }
+        .status-message.info {
+            display: block;
+            background: linear-gradient(135deg, #ffffff 30%, rgba(59, 130, 246, 0.06) 100%);
+            border-color: rgba(59, 130, 246, 0.22);
+            color: #1E3A8A;
+        }
+
+        /* ─── LEGEND ───────────────────────────────────────── */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            background: var(--ds-bg-card);
+            border: 1px solid var(--ds-border-light);
+            border-radius: var(--ds-radius-lg);
+        }
+        .legend-label-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ds-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 4px;
+        }
+        .legend-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: var(--ds-radius-pill);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .legend-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ─── GRID ─────────────────────────────────────────── */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        /* ─── TEAM CARD ────────────────────────────────────── */
+        .team-card {
+            background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+            border: 1px solid var(--ds-border-light);
+            border-radius: var(--ds-radius-lg);
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .team-card.drag-over {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+        }
+        .team-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--ds-border-light);
+        }
+        .team-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--ds-text-primary);
+        }
+        .team-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ds-accent-blue);
+            background: var(--ds-accent-blue-subtle);
+            padding: 3px 10px;
+            border-radius: var(--ds-radius-pill);
+        }
+
+        /* ─── ROLES ────────────────────────────────────────── */
+        .roles-container {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            flex-grow: 1;
+        }
+        .role-section { display: flex; flex-direction: column; gap: 6px; }
+
+        /* Минималистичный заголовок роли: точка + текст, без фона */
+        .role-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--ds-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            padding: 0;
+            background: none;
+        }
+        /* Цветная точка через ::before */
+        .role-header::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .role-header.backend::before   { background: var(--role-backend-color); }
+        .role-header.frontend::before  { background: var(--role-frontend-color); }
+        .role-header.analytics::before { background: var(--role-analytics-color); }
+        .role-header.testing::before   { background: var(--role-testing-color); }
+        .role-header.design::before    { background: var(--role-design-color); }
+        .role-header.ml::before        { background: var(--role-ml-color); }
+        .role-header.delivery::before  { background: var(--role-delivery-color); }
+
+        /* ─── PERSON CHIPS ─────────────────────────────────── */
+        .person-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            min-height: 30px;
+            padding: 2px 0;
+            background: transparent;
+            border-radius: var(--ds-radius-md);
+            transition: all 0.18s ease;
+        }
+        .person-chips.drop-target {
+            background: rgba(59, 130, 246, 0.05);
+            padding: 6px;
+            outline: 1.5px dashed rgba(59, 130, 246, 0.35);
+            outline-offset: 2px;
+            border-radius: var(--ds-radius-md);
+        }
+
+        /* Чип: белая основа + очень лёгкий цветной градиент + тонкая рамка */
+        .person-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: var(--ds-radius-pill);
+            font-size: 12.5px;
+            font-weight: 400;
+            color: var(--ds-text-secondary);
+            cursor: grab;
+            user-select: none;
+            border: 1px solid var(--ds-border-light);
+            background: #ffffff;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s, border-color 0.15s;
+        }
+        .person-chip:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+            border-color: var(--ds-border-default);
+        }
+        .person-chip:active { cursor: grabbing; }
+        .person-chip.dragging {
+            opacity: 0.35;
+            transform: scale(0.94);
+        }
+
+        /* Тонкий цветной градиент у каждой роли — едва заметный */
+        .person-chip.backend   { background: linear-gradient(135deg, #ffffff 45%, rgba(234, 88, 12, 0.06) 100%);  border-color: rgba(234, 88, 12,  0.15); }
+        .person-chip.frontend  { background: linear-gradient(135deg, #ffffff 45%, rgba(5,  150,105, 0.06) 100%);  border-color: rgba(5,  150,105,  0.15); }
+        .person-chip.analytics { background: linear-gradient(135deg, #ffffff 45%, rgba(37,  99,235, 0.06) 100%);  border-color: rgba(37,  99,235,  0.15); }
+        .person-chip.testing   { background: linear-gradient(135deg, #ffffff 45%, rgba(217,119,  6, 0.06) 100%);  border-color: rgba(217,119,  6,  0.15); }
+        .person-chip.design    { background: linear-gradient(135deg, #ffffff 45%, rgba(190, 24, 93, 0.06) 100%);  border-color: rgba(190, 24, 93,  0.15); }
+        .person-chip.ml        { background: linear-gradient(135deg, #ffffff 45%, rgba(124, 58,237, 0.06) 100%);  border-color: rgba(124, 58,237,  0.15); }
+        .person-chip.delivery  { background: linear-gradient(135deg, #ffffff 45%, rgba(220, 38, 38, 0.06) 100%);  border-color: rgba(220, 38, 38,  0.15); }
+
+        /* Точка-индикатор роли внутри чипа */
+        .person-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            opacity: 0.8;
+        }
+        .person-dot.backend   { background: var(--role-backend-color); }
+        .person-dot.frontend  { background: var(--role-frontend-color); }
+        .person-dot.analytics { background: var(--role-analytics-color); }
+        .person-dot.testing   { background: var(--role-testing-color); }
+        .person-dot.design    { background: var(--role-design-color); }
+        .person-dot.ml        { background: var(--role-ml-color); }
+        .person-dot.delivery  { background: var(--role-delivery-color); }
+
+        /* Легенда — тот же стиль, что и чипы */
+        .legend-pill {
+            background: #ffffff;
+            border: 1px solid var(--ds-border-light);
+            color: var(--ds-text-secondary);
+        }
+        .legend-pill.backend   { background: linear-gradient(135deg, #ffffff 45%, rgba(234, 88, 12, 0.06) 100%); border-color: rgba(234, 88, 12,  0.15); }
+        .legend-pill.frontend  { background: linear-gradient(135deg, #ffffff 45%, rgba(5,  150,105, 0.06) 100%); border-color: rgba(5,  150,105,  0.15); }
+        .legend-pill.analytics { background: linear-gradient(135deg, #ffffff 45%, rgba(37,  99,235, 0.06) 100%); border-color: rgba(37,  99,235,  0.15); }
+        .legend-pill.testing   { background: linear-gradient(135deg, #ffffff 45%, rgba(217,119,  6, 0.06) 100%); border-color: rgba(217,119,  6,  0.15); }
+        .legend-pill.design    { background: linear-gradient(135deg, #ffffff 45%, rgba(190, 24, 93, 0.06) 100%); border-color: rgba(190, 24, 93,  0.15); }
+        .legend-pill.ml        { background: linear-gradient(135deg, #ffffff 45%, rgba(124, 58,237, 0.06) 100%); border-color: rgba(124, 58,237,  0.15); }
+        .legend-pill.delivery  { background: linear-gradient(135deg, #ffffff 45%, rgba(220, 38, 38, 0.06) 100%); border-color: rgba(220, 38, 38,  0.15); }
+
+        .legend-dot.backend   { background: var(--role-backend-color); }
+        .legend-dot.frontend  { background: var(--role-frontend-color); }
+        .legend-dot.analytics { background: var(--role-analytics-color); }
+        .legend-dot.testing   { background: var(--role-testing-color); }
+        .legend-dot.design    { background: var(--role-design-color); }
+        .legend-dot.ml        { background: var(--role-ml-color); }
+        .legend-dot.delivery  { background: var(--role-delivery-color); }
+
+        /* ─── EMPTY STATE ──────────────────────────────────── */
+        .empty-state {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 60px 40px;
+            background: var(--ds-bg-card);
+            border: 1px solid var(--ds-border-light);
+            border-radius: var(--ds-radius-lg);
+            color: var(--ds-text-muted);
+        }
+        .empty-state-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--ds-bg-muted);
+            border-radius: var(--ds-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .empty-state-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--ds-text-secondary);
+        }
+        .empty-state-sub {
+            font-size: 13px;
+            color: var(--ds-text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="var(--ds-accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span class="nav-title">Управление командами</span>
+        </div>
+        <div class="nav-right">
+            <span style="font-size:13px; color: var(--ds-text-muted);">Структура отдела</span>
+        </div>
+    </nav>
+
+    <div class="content">
+
+        <!-- CONTROLS -->
+        <div class="controls-bar">
+            <div class="controls-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="var(--ds-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+                <span class="controls-hint">Перетаскивайте сотрудников между командами одной роли</span>
+            </div>
+            <div class="controls-actions">
+                <label for="fileInput" class="btn btn-secondary" style="cursor:pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    Загрузить Excel
+                </label>
+                <input type="file" id="fileInput" accept=".xlsx, .xls">
+                <button id="saveBtn" class="btn btn-success" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                    Сохранить
+                </button>
+                <button id="downloadTemplateBtn" class="btn btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Шаблон
+                </button>
+            </div>
+        </div>
+
+        <!-- STATUS -->
+        <div id="statusMessage" class="status-message"></div>
+
+        <!-- LEGEND -->
+        <div class="legend">
+            <span class="legend-label-title">Роли</span>
+            <span class="legend-pill backend"><span class="legend-dot backend"></span>Backend</span>
+            <span class="legend-pill frontend"><span class="legend-dot frontend"></span>Frontend</span>
+            <span class="legend-pill analytics"><span class="legend-dot analytics"></span>Аналитика</span>
+            <span class="legend-pill testing"><span class="legend-dot testing"></span>Тестирование</span>
+            <span class="legend-pill design"><span class="legend-dot design"></span>Дизайн</span>
+            <span class="legend-pill ml"><span class="legend-dot ml"></span>Machine Learning</span>
+            <span class="legend-pill delivery"><span class="legend-dot delivery"></span>Delivery</span>
+        </div>
+
+        <!-- GRID -->
+        <div id="productsGrid" class="products-grid">
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--ds-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                </div>
+                <span class="empty-state-title">Нет данных</span>
+                <span class="empty-state-sub">Загрузите Excel файл (.xlsx) с колонками: Команда, Фамилия, Роль</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentData = [];
+        let originalFileName = 'team_structure.xlsx';
+
+        const roleMapping = {
+            "Backend": "backend",
+            "Frontend": "frontend",
+            "Аналитика": "analytics",
+            "Тестирование": "testing",
+            "Дизайн": "design",
+            "ML": "ml",
+            "Delivery": "delivery"
+        };
+
+        const roleOrder = ["Backend", "Frontend", "Аналитика", "Тестирование", "Дизайн", "ML", "Delivery"];
+
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+            setTimeout(() => {
+                statusEl.className = 'status-message';
+            }, 5000);
+        }
+
+        function loadExcelFile(file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+                    if (jsonData.length === 0) {
+                        showStatus('Файл Excel пуст', 'error');
+                        return;
+                    }
+
+                    const firstRow = jsonData[0];
+                    if (!firstRow['Команда'] || !firstRow['Фамилия'] || !firstRow['Роль']) {
+                        showStatus('Файл должен содержать колонки: Команда, Фамилия, Роль', 'error');
+                        return;
+                    }
+
+                    currentData = jsonData.map(row => ({
+                        team: row['Команда'],
+                        name: row['Фамилия'],
+                        role: row['Роль']
+                    }));
+
+                    originalFileName = file.name;
+                    renderTeams();
+                    document.getElementById('saveBtn').disabled = false;
+                    showStatus(`Загружено ${currentData.length} сотрудников из файла ${file.name}`, 'success');
+                } catch (error) {
+                    showStatus('Ошибка чтения файла: ' + error.message, 'error');
+                    console.error(error);
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function renderTeams() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            const teamGroups = {};
+            currentData.forEach(person => {
+                if (!teamGroups[person.team]) teamGroups[person.team] = {};
+                if (!teamGroups[person.team][person.role]) teamGroups[person.team][person.role] = [];
+                teamGroups[person.team][person.role].push(person.name);
+            });
+
+            Object.keys(teamGroups).sort().forEach(teamName => {
+                const card = createTeamCard(teamName, teamGroups[teamName]);
+                grid.appendChild(card);
+            });
+
+            initDragAndDrop();
+        }
+
+        function createTeamCard(teamName, roles) {
+            const card = document.createElement('div');
+            card.className = 'team-card';
+            card.dataset.team = teamName;
+
+            let rolesHTML = '';
+            let totalCount = 0;
+
+            roleOrder.forEach(role => {
+                if (roles[role] && roles[role].length > 0) {
+                    const roleClass = roleMapping[role];
+                    const people = roles[role];
+                    totalCount += people.length;
+
+                    rolesHTML += `
+                        <div class="role-section">
+                            <div class="role-header ${roleClass}">
+                                <span>${role}</span>
+                                <span>${people.length}</span>
+                            </div>
+                            <div class="person-chips" data-role="${role}">
+                                ${people.map(name => `
+                                    <div class="person-chip ${roleClass}" draggable="true" data-name="${name}" data-role="${role}">
+                                        <div class="person-dot ${roleClass}"></div>
+                                        <span>${name}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            card.innerHTML = `
+                <div class="team-card-header">
+                    <span class="team-title">${teamName}</span>
+                    <span class="team-count">${totalCount}</span>
+                </div>
+                <div class="roles-container">
+                    ${rolesHTML}
+                </div>
+            `;
+
+            return card;
+        }
+
+        function initDragAndDrop() {
+            let draggedChip = null;
+            let sourceContainer = null;
+
+            document.querySelectorAll('.person-chip').forEach(chip => {
+                chip.addEventListener('dragstart', (e) => {
+                    draggedChip = e.target;
+                    sourceContainer = e.target.closest('.person-chips');
+                    e.target.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                chip.addEventListener('dragend', (e) => {
+                    e.target.classList.remove('dragging');
+                    draggedChip = null;
+                    sourceContainer = null;
+
+                    document.querySelectorAll('.person-chips').forEach(c => {
+                        c.classList.remove('drop-target');
+                    });
+                    document.querySelectorAll('.team-card').forEach(card => {
+                        card.classList.remove('drag-over');
+                    });
+                });
+            });
+
+            document.querySelectorAll('.person-chips').forEach(container => {
+                container.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+
+                    if (!draggedChip || !sourceContainer) return;
+
+                    const targetRole = container.dataset.role;
+                    const sourceRole = draggedChip.dataset.role;
+
+                    document.querySelectorAll('.person-chips').forEach(c => {
+                        c.classList.remove('drop-target');
+                    });
+                    document.querySelectorAll('.team-card').forEach(card => {
+                        card.classList.remove('drag-over');
+                    });
+
+                    if (targetRole === sourceRole && container !== sourceContainer) {
+                        container.classList.add('drop-target');
+                        container.closest('.team-card').classList.add('drag-over');
+                    }
+                });
+
+                container.addEventListener('drop', (e) => {
+                    e.preventDefault();
+
+                    if (!draggedChip || !sourceContainer) return;
+
+                    const targetRole = container.dataset.role;
+                    const sourceRole = draggedChip.dataset.role;
+
+                    if (targetRole === sourceRole && container !== sourceContainer) {
+                        const personName = draggedChip.dataset.name;
+                        const sourceTeam = sourceContainer.closest('.team-card').dataset.team;
+                        const targetTeam = container.closest('.team-card').dataset.team;
+
+                        const personIndex = currentData.findIndex(p =>
+                            p.name === personName && p.team === sourceTeam && p.role === sourceRole
+                        );
+
+                        if (personIndex !== -1) {
+                            currentData[personIndex].team = targetTeam;
+                            renderTeams();
+                            showStatus(`${personName} перемещён из «${sourceTeam}» в «${targetTeam}»`, 'success');
+                        }
+                    }
+
+                    container.classList.remove('drop-target');
+                });
+            });
+        }
+
+        function saveToExcel() {
+            try {
+                const sortedData = currentData.sort((a, b) => {
+                    if (a.team !== b.team) return a.team.localeCompare(b.team);
+                    return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+                });
+
+                const excelData = sortedData.map(person => ({
+                    'Команда': person.team,
+                    'Фамилия': person.name,
+                    'Роль': person.role
+                }));
+
+                const ws = XLSX.utils.json_to_sheet(excelData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Команды');
+
+                ws['!cols'] = [{ wch: 20 }, { wch: 20 }, { wch: 15 }];
+
+                const date = new Date().toISOString().split('T')[0];
+                const fileName = originalFileName.replace('.xlsx', `_${date}.xlsx`);
+
+                XLSX.writeFile(wb, fileName);
+                showStatus(`Файл сохранён: ${fileName}`, 'success');
+            } catch (error) {
+                showStatus('Ошибка сохранения: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+
+        function downloadTemplate() {
+            const templateData = [
+                { 'Команда': 'Команда 1', 'Фамилия': 'Иванов И.И.', 'Роль': 'Backend' },
+                { 'Команда': 'Команда 1', 'Фамилия': 'Петров П.П.', 'Роль': 'Frontend' },
+                { 'Команда': 'Команда 2', 'Фамилия': 'Сидоров С.С.', 'Роль': 'Backend' },
+                { 'Команда': 'Команда 2', 'Фамилия': 'Козлов К.К.', 'Роль': 'Аналитика' }
+            ];
+
+            const ws = XLSX.utils.json_to_sheet(templateData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Команды');
+            ws['!cols'] = [{ wch: 20 }, { wch: 20 }, { wch: 15 }];
+
+            XLSX.writeFile(wb, 'team_template.xlsx');
+            showStatus('Шаблон скачан: team_template.xlsx', 'success');
+        }
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) loadExcelFile(file);
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', saveToExcel);
+        document.getElementById('downloadTemplateBtn').addEventListener('click', downloadTemplate);
+
+        document.body.addEventListener('dragover', (e) => e.preventDefault());
+
+        document.body.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                    loadExcelFile(file);
+                    showStatus('Файл загружен через drag & drop', 'info');
+                } else {
+                    showStatus('Пожалуйста, загрузите Excel файл (.xlsx или .xls)', 'error');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
