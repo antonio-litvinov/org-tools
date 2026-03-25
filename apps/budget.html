@@ -107,6 +107,7 @@
         .badge-blue { background: var(--ds-accent-blue-subtle); color: var(--ds-accent-blue); }
         .badge-red  { background: var(--ds-error-light); color: var(--ds-error); }
 
+        /* ─── CHART LAYOUT ───────────────────────────────────── */
         .chart-body { display: flex; align-items: flex-start; }
 
         .y-axis {
@@ -127,57 +128,69 @@
 
         .chart-area { flex: 1; display: flex; flex-direction: column; }
 
-        .bars-positive {
+        /* Row of self-contained columns */
+        .bars-row {
             display: flex;
             gap: 8px;
-            height: 260px;
-            align-items: flex-end;
-            position: relative;
         }
 
-        .gridlines { position: absolute; inset: 0; pointer-events: none; }
-        .gridline {
-            position: absolute;
-            left: 0; right: 0;
-            height: 1px;
-            background: var(--ds-border-light);
+        /* ─── COLUMN ──────────────────────────────────────────── */
+        .col-outer {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
-        .gridline.top {
-            top: 0;
-            border-top: 1.5px dashed var(--ds-border-default);
+
+        /* The full-budget container — the "tank" */
+        .bar-container {
+            height: 260px;
+            border: 1px solid rgba(155, 163, 175, 0.22);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.15s;
+        }
+        .bar-container:hover {
+            border-color: rgba(155, 163, 175, 0.45);
+        }
+
+        /* Top zone: spent budget — super light semi-transparent grey */
+        .zone-spent {
+            background: rgba(243, 244, 246, 0.85);
+            flex-shrink: 0;
+        }
+
+        /* Bottom zone: remaining budget — blue "level" */
+        .zone-remaining {
+            flex: 1; /* fills whatever's left */
+            background: var(--ds-accent-blue);
+            opacity: 0.85;
+            transition: opacity 0.15s;
+        }
+        .bar-container:hover .zone-remaining { opacity: 1; }
+
+        /* Over-budget column */
+        .col-outer.over-budget .bar-container {
+            border: 2px dashed var(--ds-error);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+        }
+        .col-outer.over-budget .zone-remaining {
             background: transparent;
         }
 
-        .zero-line { height: 2px; background: var(--ds-border-default); border-radius: 1px; }
-
-        .bars-negative {
-            display: flex;
-            gap: 8px;
-            height: 60px;
-            align-items: flex-start;
+        /* Overflow bar below the container (negative months) */
+        .overflow-bar {
+            background: rgba(239, 68, 68, 0.12);
+            border-left: 2px dashed var(--ds-error);
+            border-right: 2px dashed var(--ds-error);
+            border-bottom: 2px dashed var(--ds-error);
+            border-radius: 0 0 6px 6px;
+            flex-shrink: 0;
         }
 
-        .bar-col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            height: 100%;
-            justify-content: flex-end;
-        }
-        .bar-col-neg {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            height: 100%;
-            justify-content: flex-start;
-        }
-
-        .bar { border-radius: 6px 6px 0 0; transition: opacity 0.15s; min-height: 0; }
-        .bar:hover { opacity: 0.8; }
-        .bar-overflow { border-radius: 0 0 4px 4px; min-height: 0; }
-
+        /* ─── LABELS ──────────────────────────────────────────── */
         .labels-row { display: flex; gap: 8px; margin-top: 8px; }
         .col-label { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
         .val-label {
@@ -272,7 +285,7 @@ function buildChart() {
     const wrap = document.createElement('div');
     wrap.className = 'chart-body';
 
-    // Y-axis
+    // ── Y-axis ────────────────────────────────────────────────
     const yEl = document.createElement('div');
     yEl.className = 'y-axis';
     ySteps.forEach(v => {
@@ -282,67 +295,54 @@ function buildChart() {
         yEl.appendChild(l);
     });
 
-    // Chart area
+    // ── Chart area ────────────────────────────────────────────
     const ca = document.createElement('div');
     ca.className = 'chart-area';
 
-    // Positive bars zone
-    const bp = document.createElement('div');
-    bp.className = 'bars-positive';
-
-    // Gridlines
-    const gl = document.createElement('div');
-    gl.className = 'gridlines';
-    ySteps.forEach((v, i) => {
-        const line = document.createElement('div');
-        line.className = 'gridline' + (i === 0 ? ' top' : '');
-        line.style.bottom = (v / BUDGET * CHART_H) + 'px';
-        gl.appendChild(line);
-    });
-    bp.appendChild(gl);
+    // Row of columns
+    const barsRow = document.createElement('div');
+    barsRow.className = 'bars-row';
 
     remaining.forEach(rem => {
         const isOver = rem < 0;
-        const col = document.createElement('div');
-        col.className = 'bar-col';
+        // Height of the remaining (blue) zone inside the container
+        const remH = isOver ? 0 : Math.round(rem * SCALE);
+        // Height of overflow bar below (negative months)
+        const overH = isOver ? Math.min(Math.round(Math.abs(rem) * SCALE), NEG_H) : 0;
 
-        if (isOver) {
-            col.style.cssText = 'border-left:2px dashed var(--ds-error);border-right:2px dashed var(--ds-error);border-top:2px dashed var(--ds-error);border-radius:6px 6px 0 0;background:rgba(239,68,68,0.04)';
-        } else {
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            bar.style.height = Math.round(rem * SCALE) + 'px';
-            bar.style.flexShrink = '0';
-            const pct = rem / BUDGET;
-            bar.style.background = pct > 0.4 ? 'var(--ds-accent-blue)' : pct > 0.15 ? 'var(--ds-warning)' : '#FB923C';
-            col.appendChild(bar);
+        // Outer column wrapper
+        const outer = document.createElement('div');
+        outer.className = 'col-outer' + (isOver ? ' over-budget' : '');
+
+        // The "tank" container
+        const container = document.createElement('div');
+        container.className = 'bar-container';
+
+        // Top: spent zone — fills the space above the remaining level
+        const spent = document.createElement('div');
+        spent.className = 'zone-spent';
+        spent.style.height = (CHART_H - remH) + 'px';
+
+        // Bottom: remaining zone — grows to fill the rest via flex:1
+        const remainingEl = document.createElement('div');
+        remainingEl.className = 'zone-remaining';
+
+        container.appendChild(spent);
+        container.appendChild(remainingEl);
+        outer.appendChild(container);
+
+        // Overflow bar for negative months
+        if (isOver && overH > 0) {
+            const ovBar = document.createElement('div');
+            ovBar.className = 'overflow-bar';
+            ovBar.style.height = overH + 'px';
+            outer.appendChild(ovBar);
         }
-        bp.appendChild(col);
+
+        barsRow.appendChild(outer);
     });
 
-    // Zero line
-    const zl = document.createElement('div');
-    zl.className = 'zero-line';
-
-    // Negative zone
-    const bn = document.createElement('div');
-    bn.className = 'bars-negative';
-
-    remaining.forEach(rem => {
-        const col = document.createElement('div');
-        col.className = 'bar-col-neg';
-        if (rem < 0) {
-            const bar = document.createElement('div');
-            bar.className = 'bar-overflow';
-            bar.style.height = Math.min(Math.round(Math.abs(rem) * SCALE), NEG_H) + 'px';
-            bar.style.background = 'rgba(239,68,68,0.25)';
-            col.style.cssText = 'border-left:2px dashed var(--ds-error);border-right:2px dashed var(--ds-error);border-bottom:2px dashed var(--ds-error);border-radius:0 0 6px 6px;background:rgba(239,68,68,0.04)';
-            col.appendChild(bar);
-        }
-        bn.appendChild(col);
-    });
-
-    // Labels
+    // ── Labels ────────────────────────────────────────────────
     const lr = document.createElement('div');
     lr.className = 'labels-row';
     remaining.forEach((rem, i) => {
@@ -359,9 +359,7 @@ function buildChart() {
         lr.appendChild(cl);
     });
 
-    ca.appendChild(bp);
-    ca.appendChild(zl);
-    ca.appendChild(bn);
+    ca.appendChild(barsRow);
     ca.appendChild(lr);
     wrap.appendChild(yEl);
     wrap.appendChild(ca);
