@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бюджет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ds-accent-blue:        #3B82F6;
+            --ds-accent-blue-subtle: #DBEAFE;
+            --ds-bg-card:            #FFFFFF;
+            --ds-bg-muted:           #F0F2F5;
+            --ds-bg-primary:         #FAFBFC;
+            --ds-bg-secondary:       #F5F7F9;
+            --ds-border-default:     #D1D5DB;
+            --ds-border-light:       #E5E9EF;
+            --ds-radius-lg:          16px;
+            --ds-radius-md:          10px;
+            --ds-radius-pill:        999px;
+            --ds-success:            #10B981;
+            --ds-success-light:      #D1FAE5;
+            --ds-error:              #EF4444;
+            --ds-error-light:        #FEE2E2;
+            --ds-text-inverse:       #FFFFFF;
+            --ds-text-muted:         #9BA3AF;
+            --ds-text-primary:       #1A1D21;
+            --ds-text-secondary:     #5C6370;
+            --ds-warning:            #F59E0B;
+            --ds-warning-light:      #FEF3C7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--ds-bg-primary);
+            min-height: 100vh;
+            color: var(--ds-text-primary);
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            padding: 0 32px;
+            background: var(--ds-bg-card);
+            border-bottom: 1px solid var(--ds-border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-left { display: flex; align-items: center; gap: 8px; }
+        .nav-icon { color: var(--ds-accent-blue); display: flex; }
+        .nav-title { font-size: 16px; font-weight: 600; }
+        .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-date { font-size: 13px; color: var(--ds-text-muted); }
+        .nav-avatar {
+            width: 32px; height: 32px;
+            background: var(--ds-accent-blue);
+            border-radius: 999px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 600;
+            color: var(--ds-text-inverse);
+        }
+
+        .content {
+            padding: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+        .page-title { font-size: 24px; font-weight: 600; }
+        .page-subtitle { font-size: 14px; color: var(--ds-text-muted); }
+
+        .chart-card {
+            background: var(--ds-bg-card);
+            border-radius: var(--ds-radius-lg);
+            border: 1px solid var(--ds-border-light);
+            padding: 28px 28px 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+        }
+        .card-title { font-size: 16px; font-weight: 600; }
+        .card-subtitle { font-size: 13px; color: var(--ds-text-muted); margin-top: 4px; }
+
+        .badges { display: flex; gap: 8px; align-items: center; }
+        .badge {
+            border-radius: var(--ds-radius-pill);
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-blue { background: var(--ds-accent-blue-subtle); color: var(--ds-accent-blue); }
+        .badge-red  { background: var(--ds-error-light); color: var(--ds-error); }
+
+        .chart-body { display: flex; align-items: flex-start; }
+
+        .y-axis {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 260px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .y-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--ds-text-muted);
+            text-align: right;
+            line-height: 1;
+        }
+
+        .chart-area { flex: 1; display: flex; flex-direction: column; }
+
+        .bars-positive {
+            display: flex;
+            gap: 8px;
+            height: 260px;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .gridlines { position: absolute; inset: 0; pointer-events: none; }
+        .gridline {
+            position: absolute;
+            left: 0; right: 0;
+            height: 1px;
+            background: var(--ds-border-light);
+        }
+        .gridline.top {
+            top: 0;
+            border-top: 1.5px dashed var(--ds-border-default);
+            background: transparent;
+        }
+
+        .zero-line { height: 2px; background: var(--ds-border-default); border-radius: 1px; }
+
+        .bars-negative {
+            display: flex;
+            gap: 8px;
+            height: 60px;
+            align-items: flex-start;
+        }
+
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            height: 100%;
+            justify-content: flex-end;
+        }
+        .bar-col-neg {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            height: 100%;
+            justify-content: flex-start;
+        }
+
+        .bar { border-radius: 6px 6px 0 0; transition: opacity 0.15s; min-height: 0; }
+        .bar:hover { opacity: 0.8; }
+        .bar-overflow { border-radius: 0 0 4px 4px; min-height: 0; }
+
+        .labels-row { display: flex; gap: 8px; margin-top: 8px; }
+        .col-label { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+        .val-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--ds-text-secondary);
+            white-space: nowrap;
+        }
+        .val-label.negative { color: var(--ds-error); }
+        .month-label { font-size: 11px; color: var(--ds-text-muted); }
+        .month-label.over { color: var(--ds-error); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-left">
+        <span class="nav-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+        </span>
+        <span class="nav-title">МоёУправление</span>
+    </div>
+    <div class="nav-right">
+        <span class="nav-date">2026</span>
+        <div class="nav-avatar">АИ</div>
+    </div>
+</nav>
+
+<main class="content">
+    <div class="page-header">
+        <h1 class="page-title">Бюджет</h1>
+        <p class="page-subtitle">Динамика расходования · 2026</p>
+    </div>
+
+    <div class="chart-card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Остаток бюджета по месяцам</div>
+                <div class="card-subtitle">Лимит: 118 млн ₽ · накопленным итогом</div>
+            </div>
+            <div class="badges">
+                <span class="badge badge-blue">Лимит: 118 млн</span>
+                <span class="badge badge-red" id="badge-over" style="display:none"></span>
+            </div>
+        </div>
+        <div id="chart-root"></div>
+    </div>
+</main>
+
+<script>
+// ─── ДАННЫЕ (меняй здесь) ────────────────────────────────────
+
+const BUDGET = 118; // млн ₽
+
+const MONTHLY_SPEND = [
+//  Янв   Фев   Мар   Апр   Май   Июн   Июл   Авг   Сен   Окт   Ноя   Дек
+    7.2,  8.5,  9.8, 10.3, 11.2, 12.4, 13.1, 11.8, 12.6, 13.9, 14.2, 13.0
+];
+
+const MONTHS = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+
+// ─── ВЫЧИСЛЕНИЯ ──────────────────────────────────────────────
+const cumulative = [];
+let s = 0;
+for (const x of MONTHLY_SPEND) { s += x; cumulative.push(+s.toFixed(1)); }
+const remaining = cumulative.map(c => +(BUDGET - c).toFixed(1));
+
+const CHART_H = 260;
+const NEG_H   = 60;
+const SCALE   = CHART_H / BUDGET;
+const firstOver = remaining.findIndex(r => r < 0);
+
+if (firstOver !== -1) {
+    const el = document.getElementById('badge-over');
+    el.style.display = '';
+    el.textContent = 'Перерасход с ' + MONTHS[firstOver];
+}
+
+function fmt(n) {
+    return (n < 0 ? '−' : '') + Math.abs(n).toFixed(1) + ' М';
+}
+
+function buildChart() {
+    const root = document.getElementById('chart-root');
+    const ySteps = [BUDGET, Math.round(BUDGET*.75), Math.round(BUDGET*.5), Math.round(BUDGET*.25), 0];
+
+    const wrap = document.createElement('div');
+    wrap.className = 'chart-body';
+
+    // Y-axis
+    const yEl = document.createElement('div');
+    yEl.className = 'y-axis';
+    ySteps.forEach(v => {
+        const l = document.createElement('div');
+        l.className = 'y-label';
+        l.textContent = v + ' М';
+        yEl.appendChild(l);
+    });
+
+    // Chart area
+    const ca = document.createElement('div');
+    ca.className = 'chart-area';
+
+    // Positive bars zone
+    const bp = document.createElement('div');
+    bp.className = 'bars-positive';
+
+    // Gridlines
+    const gl = document.createElement('div');
+    gl.className = 'gridlines';
+    ySteps.forEach((v, i) => {
+        const line = document.createElement('div');
+        line.className = 'gridline' + (i === 0 ? ' top' : '');
+        line.style.bottom = (v / BUDGET * CHART_H) + 'px';
+        gl.appendChild(line);
+    });
+    bp.appendChild(gl);
+
+    remaining.forEach(rem => {
+        const isOver = rem < 0;
+        const col = document.createElement('div');
+        col.className = 'bar-col';
+
+        if (isOver) {
+            col.style.cssText = 'border-left:2px dashed var(--ds-error);border-right:2px dashed var(--ds-error);border-top:2px dashed var(--ds-error);border-radius:6px 6px 0 0;background:rgba(239,68,68,0.04)';
+        } else {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = Math.round(rem * SCALE) + 'px';
+            bar.style.flexShrink = '0';
+            const pct = rem / BUDGET;
+            bar.style.background = pct > 0.4 ? 'var(--ds-accent-blue)' : pct > 0.15 ? 'var(--ds-warning)' : '#FB923C';
+            col.appendChild(bar);
+        }
+        bp.appendChild(col);
+    });
+
+    // Zero line
+    const zl = document.createElement('div');
+    zl.className = 'zero-line';
+
+    // Negative zone
+    const bn = document.createElement('div');
+    bn.className = 'bars-negative';
+
+    remaining.forEach(rem => {
+        const col = document.createElement('div');
+        col.className = 'bar-col-neg';
+        if (rem < 0) {
+            const bar = document.createElement('div');
+            bar.className = 'bar-overflow';
+            bar.style.height = Math.min(Math.round(Math.abs(rem) * SCALE), NEG_H) + 'px';
+            bar.style.background = 'rgba(239,68,68,0.25)';
+            col.style.cssText = 'border-left:2px dashed var(--ds-error);border-right:2px dashed var(--ds-error);border-bottom:2px dashed var(--ds-error);border-radius:0 0 6px 6px;background:rgba(239,68,68,0.04)';
+            col.appendChild(bar);
+        }
+        bn.appendChild(col);
+    });
+
+    // Labels
+    const lr = document.createElement('div');
+    lr.className = 'labels-row';
+    remaining.forEach((rem, i) => {
+        const cl = document.createElement('div');
+        cl.className = 'col-label';
+        const vl = document.createElement('div');
+        vl.className = 'val-label' + (rem < 0 ? ' negative' : '');
+        vl.textContent = fmt(rem);
+        const ml = document.createElement('div');
+        ml.className = 'month-label' + (rem < 0 ? ' over' : '');
+        ml.textContent = MONTHS[i];
+        cl.appendChild(vl);
+        cl.appendChild(ml);
+        lr.appendChild(cl);
+    });
+
+    ca.appendChild(bp);
+    ca.appendChild(zl);
+    ca.appendChild(bn);
+    ca.appendChild(lr);
+    wrap.appendChild(yEl);
+    wrap.appendChild(ca);
+    root.appendChild(wrap);
+}
+
+buildChart();
+</script>
+</body>
+</html>
