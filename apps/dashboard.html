@@ -172,14 +172,57 @@
         .badge-blue { background: var(--ds-accent-blue-subtle); color: var(--ds-accent-blue); }
         .badge-warning { background: var(--ds-warning-light); color: var(--ds-warning); }
 
-        .bars-area { display: flex; gap: 12px; align-items: flex-end; height: 120px; }
-        .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
-        .bar { width: 100%; background: var(--ds-accent-blue-subtle); border-radius: 6px 6px 0 0; transition: opacity 0.15s; }
-        .bar.active { background: var(--ds-accent-blue); }
-        .bar-col:hover .bar { opacity: 0.8; }
-        .labels-row { display: flex; gap: 12px; }
-        .bar-label { flex: 1; text-align: center; font-size: 11px; color: var(--ds-text-muted); }
-        .bar-label.active { color: var(--ds-accent-blue); font-weight: 600; }
+        /* ─── BUDGET CHART ────────────────────────────────────── */
+        .budget-body { display: flex; align-items: flex-start; }
+        .budget-y-axis {
+            display: flex; flex-direction: column;
+            justify-content: space-between;
+            height: 200px;
+            margin-right: 10px; flex-shrink: 0;
+        }
+        .budget-y-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px; color: var(--ds-text-muted);
+            text-align: right; line-height: 1;
+        }
+        .budget-area { flex: 1; display: flex; flex-direction: column; }
+        .budget-bars-row { display: flex; gap: 6px; }
+        .budget-col { flex: 1; display: flex; flex-direction: column; position: relative; }
+        .budget-container {
+            height: 200px;
+            border: 1px solid rgba(155,163,175,0.22);
+            border-radius: 7px;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            transition: border-color 0.15s;
+        }
+        .budget-container:hover { border-color: rgba(155,163,175,0.45); }
+        .budget-spent { background: rgba(243,244,246,0.85); flex-shrink: 0; }
+        .budget-remaining { flex: 1; background: var(--ds-accent-blue); opacity: 0.85; transition: opacity 0.15s; }
+        .budget-container:hover .budget-remaining { opacity: 1; }
+        .budget-col.over .budget-container {
+            border: 2px dashed var(--ds-error); border-bottom: none;
+            border-radius: 7px 7px 0 0;
+        }
+        .budget-col.over .budget-remaining { background: transparent; }
+        .budget-overflow {
+            background: rgba(239,68,68,0.12);
+            border-left: 2px dashed var(--ds-error);
+            border-right: 2px dashed var(--ds-error);
+            border-bottom: 2px dashed var(--ds-error);
+            border-radius: 0 0 5px 5px; flex-shrink: 0;
+        }
+        .budget-level-label {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px; font-weight: 500;
+            color: var(--ds-text-secondary);
+            white-space: nowrap; pointer-events: none; line-height: 1;
+        }
+        .budget-level-label.negative { color: var(--ds-error); }
+        .budget-labels { display: flex; gap: 6px; margin-top: 6px; }
+        .budget-month { flex: 1; text-align: center; font-size: 10px; color: var(--ds-text-muted); }
+        .budget-month.over { color: var(--ds-error); font-weight: 600; }
 
         .goals-panel {
             width: 340px; flex-shrink: 0;
@@ -326,27 +369,13 @@
     <div class="charts-row">
         <div class="bar-chart">
             <div class="chart-header">
-                <span class="chart-title">Динамика задач (Q1 2026)</span>
-                <span class="badge badge-success">+23%</span>
+                <div>
+                    <span class="chart-title">Бюджет · 2026</span>
+                    <div style="font-size:12px;color:var(--ds-text-muted);margin-top:3px">Лимит: 118 млн ₽ · остаток нарастающим итогом</div>
+                </div>
+                <span class="badge badge-red" id="db-budget-badge" style="display:none"></span>
             </div>
-            <div class="bars-area">
-                <div class="bar-col"><div class="bar" style="height:65px"></div></div>
-                <div class="bar-col"><div class="bar" style="height:80px"></div></div>
-                <div class="bar-col"><div class="bar" style="height:95px"></div></div>
-                <div class="bar-col"><div class="bar active" style="height:110px"></div></div>
-                <div class="bar-col"><div class="bar" style="height:70px"></div></div>
-                <div class="bar-col"><div class="bar" style="height:40px"></div></div>
-                <div class="bar-col"><div class="bar" style="height:25px"></div></div>
-            </div>
-            <div class="labels-row">
-                <span class="bar-label">Пн</span>
-                <span class="bar-label">Вт</span>
-                <span class="bar-label">Ср</span>
-                <span class="bar-label active">Чт</span>
-                <span class="bar-label">Пт</span>
-                <span class="bar-label">Сб</span>
-                <span class="bar-label">Вс</span>
-            </div>
+            <div id="db-budget-root"></div>
         </div>
         <div class="goals-panel">
             <div class="goals-header">
@@ -424,5 +453,98 @@
     </div>
 
 </main>
+
+<script>
+const BUDGET = 118;
+const MONTHLY_SPEND = [7.2, 8.5, 9.8, 10.3, 11.2, 12.4, 13.1, 11.8, 12.6, 13.9, 14.2, 13.0];
+const MONTHS = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+
+const cumulative = [];
+let _s = 0;
+for (const x of MONTHLY_SPEND) { _s += x; cumulative.push(+_s.toFixed(1)); }
+const remaining = cumulative.map(c => +(BUDGET - c).toFixed(1));
+
+const CHART_H = 200, NEG_H = 36, SCALE = CHART_H / BUDGET;
+const firstOver = remaining.findIndex(r => r < 0);
+
+if (firstOver !== -1) {
+    const el = document.getElementById('db-budget-badge');
+    el.style.display = '';
+    el.textContent = 'Перерасход с ' + MONTHS[firstOver];
+}
+
+(function buildBudgetChart() {
+    const root = document.getElementById('db-budget-root');
+    const ySteps = [BUDGET, Math.round(BUDGET*.75), Math.round(BUDGET*.5), Math.round(BUDGET*.25), 0];
+
+    const wrap = document.createElement('div');
+    wrap.className = 'budget-body';
+
+    const yEl = document.createElement('div');
+    yEl.className = 'budget-y-axis';
+    ySteps.forEach(v => {
+        const l = document.createElement('div');
+        l.className = 'budget-y-label';
+        l.textContent = v;
+        yEl.appendChild(l);
+    });
+
+    const area = document.createElement('div');
+    area.className = 'budget-area';
+
+    const barsRow = document.createElement('div');
+    barsRow.className = 'budget-bars-row';
+
+    remaining.forEach(rem => {
+        const isOver = rem < 0;
+        const remH = isOver ? 0 : Math.round(rem * SCALE);
+        const overH = isOver ? Math.min(Math.round(Math.abs(rem) * SCALE), NEG_H) : 0;
+
+        const col = document.createElement('div');
+        col.className = 'budget-col' + (isOver ? ' over' : '');
+
+        const container = document.createElement('div');
+        container.className = 'budget-container';
+        const spent = document.createElement('div');
+        spent.className = 'budget-spent';
+        spent.style.height = (CHART_H - remH) + 'px';
+        const remainEl = document.createElement('div');
+        remainEl.className = 'budget-remaining';
+        container.appendChild(spent);
+        container.appendChild(remainEl);
+        col.appendChild(container);
+
+        if (isOver && overH > 0) {
+            const ov = document.createElement('div');
+            ov.className = 'budget-overflow';
+            ov.style.height = overH + 'px';
+            col.appendChild(ov);
+        }
+
+        const lbl = document.createElement('div');
+        lbl.className = 'budget-level-label' + (isOver ? ' negative' : '');
+        lbl.textContent = (isOver ? '−' : '') + Math.abs(rem).toFixed(1);
+        lbl.style.top = (isOver ? CHART_H - 12 : Math.max(4, CHART_H - remH - 12)) + 'px';
+        col.appendChild(lbl);
+
+        barsRow.appendChild(col);
+    });
+
+    const labelsRow = document.createElement('div');
+    labelsRow.className = 'budget-labels';
+    remaining.forEach((rem, i) => {
+        const m = document.createElement('div');
+        m.className = 'budget-month' + (rem < 0 ? ' over' : '');
+        m.textContent = MONTHS[i];
+        labelsRow.appendChild(m);
+    });
+
+    area.appendChild(barsRow);
+    area.appendChild(labelsRow);
+    wrap.appendChild(yEl);
+    wrap.appendChild(area);
+    root.appendChild(wrap);
+})();
+</script>
 </body>
 </html>
