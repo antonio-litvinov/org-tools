@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>org-tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #FAFBFC;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #1A1D21;
+            gap: 48px;
+            padding: 32px;
+        }
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon { color: #3B82F6; }
+        .logo-title { font-size: 24px; font-weight: 600; }
+        .logo-sub { font-size: 14px; color: #9BA3AF; }
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card {
+            background: #FFFFFF;
+            border: 1px solid #E5E9EF;
+            border-radius: 16px;
+            padding: 28px 32px;
+            width: 240px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: box-shadow 0.15s, border-color 0.15s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(59,130,246,0.1);
+            border-color: #BFDBFE;
+        }
+        .card-icon { color: #3B82F6; }
+        .card-name { font-size: 16px; font-weight: 600; }
+        .card-desc { font-size: 13px; color: #9BA3AF; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <span class="logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+        </span>
+        <span class="logo-title">org-tools</span>
+        <span class="logo-sub">Инструменты управления командой</span>
+    </div>
+    <div class="cards">
+        <a class="card" href="apps/dashboard.html">
+            <span class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+            </span>
+            <span class="card-name">Показатели</span>
+            <span class="card-desc">Дашборд показателей управления, цели квартала, статусы подразделений</span>
+        </a>
+        <a class="card" href="apps/team-cards.html">
+            <span class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </span>
+            <span class="card-name">Команды</span>
+            <span class="card-desc">Визуализация структуры команды, перетаскивание сотрудников, импорт Excel</span>
+        </a>
+    </div>
+</body>
+</html>
