@@ -198,7 +198,7 @@
         .iv-months { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
         .iv-row {
             display: grid;
-            grid-template-columns: 52px 1fr 44px 44px 44px;
+            grid-template-columns: 52px 44px 44px 44px;
             align-items: center; gap: 10px;
             padding: 5px 8px;
             border-radius: var(--ds-radius-sm);
@@ -210,15 +210,7 @@
             padding-bottom: 4px; margin-bottom: 2px;
         }
         .iv-month { color: var(--ds-text-secondary); font-weight: 500; }
-        .iv-bar-wrap {
-            height: 4px; background: var(--ds-bg-muted);
-            border-radius: 99px; overflow: hidden;
-        }
-        .iv-bar-fill {
-            height: 100%; background: var(--ds-accent-blue);
-            border-radius: 99px;
-        }
-        .iv-num { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+.iv-num { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
         .iv-num.hired  { color: var(--ds-accent-blue); }
         .iv-num.conv   { color: var(--ds-success); }
         .company-row {
@@ -380,7 +372,6 @@
         <div class="iv-months">
             <div class="iv-row header">
                 <span>Месяц</span>
-                <span></span>
                 <span class="iv-num">Провели</span>
                 <span class="iv-num hired">Наняли</span>
                 <span class="iv-num conv">Конв.</span>
@@ -481,7 +472,6 @@ DATA.interviews.forEach(m => {
     row.className = 'iv-row';
     row.innerHTML = `
         <span class="iv-month">${m.month}</span>
-        <div class="iv-bar-wrap"><div class="iv-bar-fill" style="width:${barW}%"></div></div>
         <span class="iv-num">${m.conducted}</span>
         <span class="iv-num hired">${m.hired}</span>
         <span class="iv-num conv">${conv}%</span>`;
