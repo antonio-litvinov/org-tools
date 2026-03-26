@@ -248,7 +248,7 @@
         /* ─── MAIN GRID ───────────────────────────────────────── */
         .main-grid {
             display: grid;
-            grid-template-columns: 1fr 320px;
+            grid-template-columns: 1fr 360px;
             gap: 20px;
             align-items: start;
         }
@@ -346,23 +346,22 @@
         .stat-label { font-size: 11px; color: var(--ds-text-muted); white-space: nowrap; }
 
         /* Company breakdown */
-        .companies-card { align-self: flex-start; }
-        .companies-list { display: flex; gap: 12px; }
+        .companies-list { display: flex; flex-direction: column; gap: 2px; }
         .company-row {
-            display: flex; flex-direction: column; gap: 10px;
-            padding: 12px 14px; border-radius: var(--ds-radius-md);
-            background: var(--ds-bg-secondary); flex: 1; min-width: 0;
+            display: flex; align-items: center; gap: 10px;
+            padding: 6px 8px; border-radius: var(--ds-radius-sm);
         }
-        .company-name { font-size: 13px; font-weight: 600; }
-        .company-stats { display: flex; gap: 6px; }
+        .company-row:hover { background: var(--ds-bg-secondary); }
+        .company-name { font-size: 13px; font-weight: 500; color: var(--ds-text-secondary); flex: 1; min-width: 0; }
+        .company-stats { display: flex; gap: 6px; flex-shrink: 0; }
         .company-chip {
-            display: flex; align-items: center; gap: 4px;
-            padding: 3px 8px; border-radius: var(--ds-radius-pill);
+            display: flex; align-items: center; gap: 3px;
+            padding: 2px 7px; border-radius: var(--ds-radius-pill);
             font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600;
         }
         .company-chip.hired     { background: var(--ds-accent-blue-subtle); color: var(--ds-accent-blue); }
         .company-chip.searching { background: var(--ds-warning-light); color: var(--ds-warning); }
-        .chip-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 400; opacity: 0.75; }
+        .chip-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 400; opacity: 0.7; }
 
         /* Interviews */
         .iv-summary {
@@ -837,8 +836,8 @@ const HC = {
         el.className = 'company-row';
         el.innerHTML = `<span class="company-name">${c.name}</span>
             <div class="company-stats">
-                <span class="company-chip hired">${c.hired} <span class="chip-label">нанято</span></span>
-                <span class="company-chip searching">${c.searching} <span class="chip-label">в поиске</span></span>
+                <span class="company-chip hired">${c.hired} <span class="chip-label">найм</span></span>
+                <span class="company-chip searching">${c.searching} <span class="chip-label">поиск</span></span>
             </div>`;
         compEl.appendChild(el);
     });
