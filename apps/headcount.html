@@ -157,25 +157,20 @@
         .staff-card,
         .vendor-card { width: 240px; flex-shrink: 0; }
 
-        /* Company breakdown inside vendor card */
-        .company-divider {
-            height: 1px;
-            background: var(--ds-border-light);
-            margin: 0 -4px;
-        }
-        .companies-list { display: flex; flex-direction: column; gap: 6px; }
+        /* Company breakdown card */
+        .companies-card { align-self: flex-start; }
+        .companies-list { display: flex; gap: 12px; }
         .company-row {
-            display: flex; align-items: center;
-            padding: 6px 8px;
-            border-radius: var(--ds-radius-sm);
-            gap: 12px;
+            display: flex; flex-direction: column;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: var(--ds-radius-md);
+            background: var(--ds-bg-secondary);
+            min-width: 160px;
         }
-        .company-row:hover { background: var(--ds-bg-secondary); }
         .company-name {
-            font-size: 13px; font-weight: 500;
-            color: var(--ds-text-secondary);
-            flex: 1;
-            min-width: 0;
+            font-size: 13px; font-weight: 600;
+            color: var(--ds-text-primary);
         }
         .company-stats { display: flex; gap: 6px; align-items: center; }
         .company-chip {
@@ -288,10 +283,16 @@
                     <span class="stat-label">в поиске</span>
                 </div>
             </div>
-            <div class="company-divider"></div>
-            <div class="companies-list" id="companies-list"></div>
         </div>
 
+    </div>
+
+    <!-- Company breakdown -->
+    <div class="section-card companies-card">
+        <div class="section-header">
+            <span class="section-name">Декомпозиция вендора</span>
+        </div>
+        <div class="companies-list" id="companies-list"></div>
     </div>
 
 </main>
