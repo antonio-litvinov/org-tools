@@ -162,21 +162,19 @@
         .companies-list { display: flex; gap: 12px; }
 
         /* Roles breakdown */
-        .roles-list { display: flex; gap: 8px; flex-wrap: wrap; }
+        .roles-list { display: flex; flex-direction: column; gap: 2px; }
         .role-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 14px;
-            border-radius: var(--ds-radius-md);
-            background: var(--ds-bg-secondary);
-            flex: 1; min-width: 120px;
+            display: flex; align-items: center; gap: 9px;
+            padding: 6px 8px;
+            border-radius: var(--ds-radius-sm);
         }
+        .role-item:hover { background: var(--ds-bg-secondary); }
         .role-dot {
-            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+            width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
         }
         .role-label { font-size: 13px; color: var(--ds-text-secondary); flex: 1; }
         .role-count {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 18px; font-weight: 600;
+            font-size: 13px; font-weight: 600;
             color: var(--ds-text-primary);
         }
         .company-row {
