@@ -246,10 +246,8 @@
         .goal-status.risk    { background: var(--ds-warning-light); color: var(--ds-warning); }
         .goal-status.fail    { background: var(--ds-error-light); color: var(--ds-error); }
 
-        /* ─── BUDGET + INTERVIEWS ROW ─────────────────────────── */
-        .budget-row { display: flex; gap: 20px; align-items: flex-start; }
-        .budget-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
-        .interviews-panel { width: 300px; flex-shrink: 0; }
+        /* ─── BUDGET SECTION ─────────────────────────────────── */
+        .budget-left { display: flex; flex-direction: column; gap: 20px; }
 
         /* Goals panel — full width */
         .goals-panel {
@@ -467,58 +465,27 @@
 
     <div id="metrics-row" class="metrics"></div>
 
-    <!-- Бюджет + Собеседования в одну строку -->
-    <div class="budget-row">
-        <div class="budget-left">
-            <div class="bar-chart">
-                <div class="chart-header">
-                    <div>
-                        <span class="chart-title">Бюджет · 2026</span>
-                        <div style="font-size:12px;color:var(--ds-text-muted);margin-top:3px">Лимит: 118 млн ₽ · остаток нарастающим итогом</div>
-                    </div>
-                    <span class="badge badge-red" id="db-budget-badge" style="display:none"></span>
+    <!-- Бюджет + Цели -->
+    <div class="budget-left">
+        <div class="bar-chart">
+            <div class="chart-header">
+                <div>
+                    <span class="chart-title">Бюджет · 2026</span>
+                    <div style="font-size:12px;color:var(--ds-text-muted);margin-top:3px">Лимит: 118 млн ₽ · остаток нарастающим итогом</div>
                 </div>
-                <div id="db-budget-root"></div>
+                <span class="badge badge-red" id="db-budget-badge" style="display:none"></span>
             </div>
-
-            <!-- Цели — той же ширины что бюджет -->
-            <div class="goals-panel">
-                <div class="goals-header">
-                    <span class="goals-title">Цели квартала</span>
-                    <span class="badge badge-blue">Q1 2026</span>
-                </div>
-                <div class="goals-divider"></div>
-                <div id="goals-list" class="goals-list"></div>
-            </div>
+            <div id="db-budget-root"></div>
         </div>
 
-        <div class="section-card interviews-panel">
-            <div class="section-header"><span class="section-name">Собеседования</span></div>
-            <div class="iv-summary">
-                <div class="iv-metric">
-                    <span class="iv-metric-value" id="hc-iv-total">—</span>
-                    <span class="iv-metric-label">всего проведено</span>
-                </div>
-                <div class="iv-vdivider"></div>
-                <div class="iv-metric">
-                    <span class="iv-metric-value hired" id="hc-iv-hired">—</span>
-                    <span class="iv-metric-label">оффер принят</span>
-                </div>
-                <div class="iv-vdivider"></div>
-                <div class="iv-metric">
-                    <span class="iv-metric-value conv" id="hc-iv-conv">—</span>
-                    <span class="iv-metric-label">конверсия</span>
-                </div>
+        <!-- Цели — той же ширины что бюджет -->
+        <div class="goals-panel">
+            <div class="goals-header">
+                <span class="goals-title">Цели квартала</span>
+                <span class="badge badge-blue">Q1 2026</span>
             </div>
-            <div class="iv-months">
-                <div class="iv-row iv-header">
-                    <span>Месяц</span>
-                    <span class="iv-num">Провели</span>
-                    <span class="iv-num hired">Наняли</span>
-                    <span class="iv-num conv">Конв.</span>
-                </div>
-                <div id="hc-iv-rows"></div>
-            </div>
+            <div class="goals-divider"></div>
+            <div id="goals-list" class="goals-list"></div>
         </div>
     </div>
 
@@ -591,8 +558,43 @@
             <div class="section-header"><span class="section-name">По ролям</span></div>
             <div class="roles-list" id="hc-roles"></div>
         </div>
-        <div class="section-card" style="align-self:flex-start;min-width:240px">
-            <div class="section-header"><span class="section-name">Интервью по ролям</span></div>
+    </div>
+
+    <!-- Собеседования: общие и по ролям рядом -->
+    <div class="bottom-header">
+        <span class="bottom-title">Собеседования</span>
+    </div>
+    <div style="display:flex;gap:16px;align-items:flex-start">
+        <div class="section-card" style="flex:1;min-width:0">
+            <div class="section-header"><span class="section-name">По месяцам</span></div>
+            <div class="iv-summary">
+                <div class="iv-metric">
+                    <span class="iv-metric-value" id="hc-iv-total">—</span>
+                    <span class="iv-metric-label">всего проведено</span>
+                </div>
+                <div class="iv-vdivider"></div>
+                <div class="iv-metric">
+                    <span class="iv-metric-value hired" id="hc-iv-hired">—</span>
+                    <span class="iv-metric-label">оффер принят</span>
+                </div>
+                <div class="iv-vdivider"></div>
+                <div class="iv-metric">
+                    <span class="iv-metric-value conv" id="hc-iv-conv">—</span>
+                    <span class="iv-metric-label">конверсия</span>
+                </div>
+            </div>
+            <div class="iv-months">
+                <div class="iv-row iv-header">
+                    <span>Месяц</span>
+                    <span class="iv-num">Провели</span>
+                    <span class="iv-num hired">Наняли</span>
+                    <span class="iv-num conv">Конв.</span>
+                </div>
+                <div id="hc-iv-rows"></div>
+            </div>
+        </div>
+        <div class="section-card" style="flex:1;min-width:0;align-self:flex-start">
+            <div class="section-header"><span class="section-name">По ролям</span></div>
             <div class="iv-by-role" id="hc-iv-roles"></div>
         </div>
     </div>
