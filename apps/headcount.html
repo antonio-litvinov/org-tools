@@ -160,6 +160,25 @@
         /* Company breakdown card */
         .companies-card { align-self: flex-start; }
         .companies-list { display: flex; gap: 12px; }
+
+        /* Roles breakdown */
+        .roles-list { display: flex; gap: 8px; flex-wrap: wrap; }
+        .role-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px;
+            border-radius: var(--ds-radius-md);
+            background: var(--ds-bg-secondary);
+            flex: 1; min-width: 120px;
+        }
+        .role-dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+        .role-label { font-size: 13px; color: var(--ds-text-secondary); flex: 1; }
+        .role-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px; font-weight: 600;
+            color: var(--ds-text-primary);
+        }
         .company-row {
             display: flex; flex-direction: column;
             gap: 10px;
@@ -295,6 +314,14 @@
         <div class="companies-list" id="companies-list"></div>
     </div>
 
+    <!-- Roles breakdown -->
+    <div class="section-card">
+        <div class="section-header">
+            <span class="section-name">По ролям</span>
+        </div>
+        <div class="roles-list" id="roles-list"></div>
+    </div>
+
 </main>
 
 <script>
@@ -304,6 +331,15 @@ const DATA = {
         { name: 'Компания А', hired: 18, searching: 4 },
         { name: 'Компания И', hired: 13, searching: 3 },
         { name: 'Компания С', hired:  6, searching: 1 }
+    ],
+    roles: [
+        { label: 'Backend',        count: 24, color: '#EA580C' },
+        { label: 'Frontend',       count: 18, color: '#059669' },
+        { label: 'Тестирование',   count: 12, color: '#D97706' },
+        { label: 'Аналитика',      count:  9, color: '#2563EB' },
+        { label: 'Сопровождение',  count:  8, color: '#DC2626' },
+        { label: 'DevOps',         count:  6, color: '#7C3AED' },
+        { label: 'PO / PL / DL',   count:  9, color: '#0891B2' },
     ]
 };
 
@@ -336,6 +372,17 @@ DATA.vendor.forEach(c => {
             <span class="company-chip searching">${c.searching} <span class="chip-label">в поиске</span></span>
         </div>`;
     list.appendChild(row);
+});
+
+const rolesList = document.getElementById('roles-list');
+DATA.roles.forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'role-item';
+    item.innerHTML = `
+        <span class="role-dot" style="background:${r.color}"></span>
+        <span class="role-label">${r.label}</span>
+        <span class="role-count">${r.count}</span>`;
+    rolesList.appendChild(item);
 });
 </script>
 
