@@ -177,6 +177,50 @@
             font-size: 13px; font-weight: 600;
             color: var(--ds-text-primary);
         }
+
+        /* Interviews block */
+        .interviews-summary {
+            display: flex; gap: 24px; align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--ds-border-light);
+        }
+        .iv-metric { display: flex; flex-direction: column; gap: 3px; }
+        .iv-metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px; font-weight: 600; line-height: 1;
+            color: var(--ds-text-primary);
+        }
+        .iv-metric-value.hired  { color: var(--ds-accent-blue); }
+        .iv-metric-value.conv   { color: var(--ds-success); }
+        .iv-metric-label { font-size: 11px; color: var(--ds-text-muted); }
+        .iv-divider { width: 1px; height: 32px; background: var(--ds-border-light); }
+
+        .iv-months { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+        .iv-row {
+            display: grid;
+            grid-template-columns: 52px 1fr 44px 44px 44px;
+            align-items: center; gap: 10px;
+            padding: 5px 8px;
+            border-radius: var(--ds-radius-sm);
+            font-size: 12px;
+        }
+        .iv-row:hover { background: var(--ds-bg-secondary); }
+        .iv-row.header {
+            color: var(--ds-text-muted); font-size: 11px;
+            padding-bottom: 4px; margin-bottom: 2px;
+        }
+        .iv-month { color: var(--ds-text-secondary); font-weight: 500; }
+        .iv-bar-wrap {
+            height: 4px; background: var(--ds-bg-muted);
+            border-radius: 99px; overflow: hidden;
+        }
+        .iv-bar-fill {
+            height: 100%; background: var(--ds-accent-blue);
+            border-radius: 99px;
+        }
+        .iv-num { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+        .iv-num.hired  { color: var(--ds-accent-blue); }
+        .iv-num.conv   { color: var(--ds-success); }
         .company-row {
             display: flex; flex-direction: column;
             gap: 10px;
@@ -312,6 +356,39 @@
         <div class="companies-list" id="companies-list"></div>
     </div>
 
+    <!-- Interviews -->
+    <div class="section-card">
+        <div class="section-header">
+            <span class="section-name">Собеседования</span>
+        </div>
+        <div class="interviews-summary">
+            <div class="iv-metric">
+                <span class="iv-metric-value" id="iv-total">—</span>
+                <span class="iv-metric-label">всего проведено</span>
+            </div>
+            <div class="iv-divider"></div>
+            <div class="iv-metric">
+                <span class="iv-metric-value hired" id="iv-hired">—</span>
+                <span class="iv-metric-label">оффер принят</span>
+            </div>
+            <div class="iv-divider"></div>
+            <div class="iv-metric">
+                <span class="iv-metric-value conv" id="iv-conv">—</span>
+                <span class="iv-metric-label">конверсия</span>
+            </div>
+        </div>
+        <div class="iv-months">
+            <div class="iv-row header">
+                <span>Месяц</span>
+                <span></span>
+                <span class="iv-num">Провели</span>
+                <span class="iv-num hired">Наняли</span>
+                <span class="iv-num conv">Конв.</span>
+            </div>
+            <div id="iv-rows"></div>
+        </div>
+    </div>
+
     <!-- Roles breakdown -->
     <div class="section-card" style="align-self:flex-start;min-width:220px">
         <div class="section-header">
@@ -329,6 +406,20 @@ const DATA = {
         { name: 'Компания А', hired: 18, searching: 4 },
         { name: 'Компания И', hired: 13, searching: 3 },
         { name: 'Компания С', hired:  6, searching: 1 }
+    ],
+    interviews: [
+        { month: 'Янв', conducted: 18, hired: 4 },
+        { month: 'Фев', conducted: 22, hired: 5 },
+        { month: 'Мар', conducted: 31, hired: 8 },
+        { month: 'Апр', conducted: 27, hired: 6 },
+        { month: 'Май', conducted: 34, hired: 7 },
+        { month: 'Июн', conducted: 29, hired: 5 },
+        { month: 'Июл', conducted: 25, hired: 4 },
+        { month: 'Авг', conducted: 38, hired: 9 },
+        { month: 'Сен', conducted: 41, hired: 10 },
+        { month: 'Окт', conducted: 36, hired: 8 },
+        { month: 'Ноя', conducted: 30, hired: 6 },
+        { month: 'Дек', conducted: 24, hired: 4 },
     ],
     roles: [
         { label: 'Backend',        count: 24, color: '#EA580C' },
@@ -370,6 +461,31 @@ DATA.vendor.forEach(c => {
             <span class="company-chip searching">${c.searching} <span class="chip-label">в поиске</span></span>
         </div>`;
     list.appendChild(row);
+});
+
+// Interviews
+const ivTotal  = DATA.interviews.reduce((s, m) => s + m.conducted, 0);
+const ivHired  = DATA.interviews.reduce((s, m) => s + m.hired, 0);
+const ivConv   = Math.round(ivHired / ivTotal * 100);
+const maxCond  = Math.max(...DATA.interviews.map(m => m.conducted));
+
+document.getElementById('iv-total').textContent = ivTotal;
+document.getElementById('iv-hired').textContent = ivHired;
+document.getElementById('iv-conv').textContent  = ivConv + '%';
+
+const ivRows = document.getElementById('iv-rows');
+DATA.interviews.forEach(m => {
+    const conv = Math.round(m.hired / m.conducted * 100);
+    const barW  = Math.round(m.conducted / maxCond * 100);
+    const row = document.createElement('div');
+    row.className = 'iv-row';
+    row.innerHTML = `
+        <span class="iv-month">${m.month}</span>
+        <div class="iv-bar-wrap"><div class="iv-bar-fill" style="width:${barW}%"></div></div>
+        <span class="iv-num">${m.conducted}</span>
+        <span class="iv-num hired">${m.hired}</span>
+        <span class="iv-num conv">${conv}%</span>`;
+    ivRows.appendChild(row);
 });
 
 const rolesList = document.getElementById('roles-list');
