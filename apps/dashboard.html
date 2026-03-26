@@ -24,6 +24,7 @@
             --ds-border-light:       #E5E9EF;
             --ds-radius-lg:          16px;
             --ds-radius-md:          10px;
+            --ds-radius-sm:          6px;
             --ds-radius-pill:        999px;
             --ds-radius-sm:          6px;
             --ds-success:            #10B981;
@@ -264,6 +265,134 @@
         .team-card-top { display: flex; justify-content: space-between; align-items: center; }
         .team-name { font-size: 15px; font-weight: 600; color: var(--ds-text-primary); }
         .team-stat { font-size: 13px; color: var(--ds-text-muted); }
+
+        /* ─── HEADCOUNT SECTION ───────────────────────────────── */
+        .hc-section { display: flex; flex-direction: column; gap: 12px; }
+        .section-card {
+            background: var(--ds-bg-card);
+            border: 1px solid var(--ds-border-light);
+            border-radius: var(--ds-radius-lg);
+            padding: 20px;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .section-name { font-size: 14px; font-weight: 600; }
+        .section-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px; font-weight: 500;
+            background: var(--ds-bg-muted); color: var(--ds-text-secondary);
+            border-radius: var(--ds-radius-pill); padding: 3px 10px;
+        }
+
+        /* Tribe summary */
+        .tribe-card {
+            background: var(--ds-bg-card); border: 1px solid var(--ds-border-light);
+            border-radius: var(--ds-radius-lg); padding: 20px 24px;
+            display: flex; align-items: center; gap: 32px;
+        }
+        .tribe-name {
+            font-size: 13px; font-weight: 500; color: var(--ds-text-muted);
+            text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+        }
+        .tribe-total {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 40px; font-weight: 600; line-height: 1;
+        }
+        .tribe-vdivider { width: 1px; height: 40px; background: var(--ds-border-light); flex-shrink: 0; }
+        .tribe-formula { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .tribe-formula-item { display: flex; flex-direction: column; gap: 2px; }
+        .tribe-formula-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px; font-weight: 600; line-height: 1;
+        }
+        .tribe-formula-value.hired   { color: var(--ds-accent-blue); }
+        .tribe-formula-value.vacancy { color: var(--ds-warning); }
+        .tribe-formula-value.vendor  { color: var(--ds-text-secondary); }
+        .tribe-formula-label { font-size: 11px; color: var(--ds-text-muted); }
+        .tribe-plus { font-size: 18px; font-weight: 300; color: var(--ds-border-light); margin-top: -4px; }
+
+        /* Section row */
+        .hc-sections-row { display: flex; gap: 16px; align-items: flex-start; }
+        .hc-card-fixed { width: 240px; flex-shrink: 0; }
+
+        /* Stat blocks */
+        .stats-row { display: flex; gap: 8px; }
+        .stat-block {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; gap: 5px; padding: 12px 8px;
+            border-radius: var(--ds-radius-md);
+        }
+        .stat-block.hired      { background: var(--ds-accent-blue-subtle); }
+        .stat-block.vacancy    { background: var(--ds-warning-light); }
+        .stat-block.searching  { background: var(--ds-warning-light); }
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px; font-weight: 600; line-height: 1;
+        }
+        .stat-block.hired     .stat-number { color: var(--ds-accent-blue); }
+        .stat-block.vacancy   .stat-number { color: var(--ds-warning); }
+        .stat-block.searching .stat-number { color: var(--ds-warning); }
+        .stat-label { font-size: 11px; color: var(--ds-text-muted); white-space: nowrap; }
+
+        /* Company breakdown */
+        .companies-card { align-self: flex-start; }
+        .companies-list { display: flex; gap: 12px; }
+        .company-row {
+            display: flex; flex-direction: column; gap: 10px;
+            padding: 12px 14px; border-radius: var(--ds-radius-md);
+            background: var(--ds-bg-secondary); min-width: 160px;
+        }
+        .company-name { font-size: 13px; font-weight: 600; }
+        .company-stats { display: flex; gap: 6px; }
+        .company-chip {
+            display: flex; align-items: center; gap: 4px;
+            padding: 3px 8px; border-radius: var(--ds-radius-pill);
+            font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600;
+        }
+        .company-chip.hired     { background: var(--ds-accent-blue-subtle); color: var(--ds-accent-blue); }
+        .company-chip.searching { background: var(--ds-warning-light); color: var(--ds-warning); }
+        .chip-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 400; opacity: 0.75; }
+
+        /* Bottom row: interviews + roles */
+        .hc-bottom-row { display: flex; gap: 16px; align-items: flex-start; }
+
+        /* Interviews */
+        .iv-summary {
+            display: flex; gap: 24px; align-items: center;
+            padding-bottom: 16px; border-bottom: 1px solid var(--ds-border-light);
+        }
+        .iv-metric { display: flex; flex-direction: column; gap: 3px; }
+        .iv-metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px; font-weight: 600; line-height: 1;
+        }
+        .iv-metric-value.hired { color: var(--ds-accent-blue); }
+        .iv-metric-value.conv  { color: var(--ds-success); }
+        .iv-metric-label { font-size: 11px; color: var(--ds-text-muted); }
+        .iv-vdivider { width: 1px; height: 32px; background: var(--ds-border-light); }
+        .iv-months { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+        .iv-row {
+            display: grid; grid-template-columns: 52px 44px 44px 44px;
+            align-items: center; gap: 10px;
+            padding: 5px 8px; border-radius: var(--ds-radius-sm); font-size: 12px;
+        }
+        .iv-row:hover { background: var(--ds-bg-secondary); }
+        .iv-row.iv-header { color: var(--ds-text-muted); font-size: 11px; padding-bottom: 4px; margin-bottom: 2px; }
+        .iv-month { color: var(--ds-text-secondary); font-weight: 500; }
+        .iv-num { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+        .iv-num.hired { color: var(--ds-accent-blue); }
+        .iv-num.conv  { color: var(--ds-success); }
+
+        /* Roles */
+        .roles-list { display: flex; flex-direction: column; gap: 2px; }
+        .role-item {
+            display: flex; align-items: center; gap: 9px;
+            padding: 6px 8px; border-radius: var(--ds-radius-sm);
+        }
+        .role-item:hover { background: var(--ds-bg-secondary); }
+        .role-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .role-label { font-size: 13px; color: var(--ds-text-secondary); flex: 1; }
+        .role-count { font-size: 13px; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -423,6 +552,110 @@
         </div>
     </div>
 
+    <!-- ── Headcount ─────────────────────────────────────────── -->
+    <div class="hc-section">
+        <div class="bottom-header">
+            <span class="bottom-title">Численность трайба</span>
+        </div>
+
+        <div class="tribe-card">
+            <span class="tribe-name">Трайб</span>
+            <span class="tribe-total" id="hc-tribe-total">—</span>
+            <div class="tribe-vdivider"></div>
+            <div class="tribe-formula">
+                <div class="tribe-formula-item">
+                    <span class="tribe-formula-value hired" id="hc-staff-hired">—</span>
+                    <span class="tribe-formula-label">штатных нанято</span>
+                </div>
+                <span class="tribe-plus">+</span>
+                <div class="tribe-formula-item">
+                    <span class="tribe-formula-value vacancy" id="hc-staff-vacancy">—</span>
+                    <span class="tribe-formula-label">штатных вакансий</span>
+                </div>
+                <span class="tribe-plus">+</span>
+                <div class="tribe-formula-item">
+                    <span class="tribe-formula-value vendor" id="hc-vendor-hired">—</span>
+                    <span class="tribe-formula-label">нанято в подряде</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hc-sections-row">
+            <div class="section-card hc-card-fixed">
+                <div class="section-header">
+                    <span class="section-name">Штатные</span>
+                    <span class="section-badge" id="hc-staff-total">—</span>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-block hired">
+                        <span class="stat-number" id="hc-s-hired">—</span>
+                        <span class="stat-label">нанятых</span>
+                    </div>
+                    <div class="stat-block vacancy">
+                        <span class="stat-number" id="hc-s-vacancy">—</span>
+                        <span class="stat-label">вакансий</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-card hc-card-fixed">
+                <div class="section-header">
+                    <span class="section-name">Вендор</span>
+                    <span class="section-badge" id="hc-vendor-total">—</span>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-block hired">
+                        <span class="stat-number" id="hc-v-hired">—</span>
+                        <span class="stat-label">нанятых</span>
+                    </div>
+                    <div class="stat-block searching">
+                        <span class="stat-number" id="hc-v-searching">—</span>
+                        <span class="stat-label">в поиске</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card companies-card">
+            <div class="section-header"><span class="section-name">Декомпозиция вендора</span></div>
+            <div class="companies-list" id="hc-companies"></div>
+        </div>
+
+        <div class="hc-bottom-row">
+            <div class="section-card" style="align-self:flex-start;min-width:280px">
+                <div class="section-header"><span class="section-name">Собеседования</span></div>
+                <div class="iv-summary">
+                    <div class="iv-metric">
+                        <span class="iv-metric-value" id="hc-iv-total">—</span>
+                        <span class="iv-metric-label">всего проведено</span>
+                    </div>
+                    <div class="iv-vdivider"></div>
+                    <div class="iv-metric">
+                        <span class="iv-metric-value hired" id="hc-iv-hired">—</span>
+                        <span class="iv-metric-label">оффер принят</span>
+                    </div>
+                    <div class="iv-vdivider"></div>
+                    <div class="iv-metric">
+                        <span class="iv-metric-value conv" id="hc-iv-conv">—</span>
+                        <span class="iv-metric-label">конверсия</span>
+                    </div>
+                </div>
+                <div class="iv-months">
+                    <div class="iv-row iv-header">
+                        <span>Месяц</span>
+                        <span class="iv-num">Провели</span>
+                        <span class="iv-num hired">Наняли</span>
+                        <span class="iv-num conv">Конв.</span>
+                    </div>
+                    <div id="hc-iv-rows"></div>
+                </div>
+            </div>
+            <div class="section-card" style="align-self:flex-start;min-width:220px">
+                <div class="section-header"><span class="section-name">По ролям</span></div>
+                <div class="roles-list" id="hc-roles"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="bottom-section">
         <div class="bottom-header">
             <span class="bottom-title">Подразделения</span>
@@ -544,6 +777,96 @@ if (firstOver !== -1) {
     wrap.appendChild(yEl);
     wrap.appendChild(area);
     root.appendChild(wrap);
+})();
+
+// ── Headcount ─────────────────────────────────────────────────
+const HC = {
+    staff: { hired: 68, vacancy: 14 },
+    vendor: [
+        { name: 'Компания А', hired: 18, searching: 4 },
+        { name: 'Компания И', hired: 13, searching: 3 },
+        { name: 'Компания С', hired:  6, searching: 1 }
+    ],
+    interviews: [
+        { month: 'Янв', conducted: 18, hired: 4 },
+        { month: 'Фев', conducted: 22, hired: 5 },
+        { month: 'Мар', conducted: 31, hired: 8 },
+        { month: 'Апр', conducted: 27, hired: 6 },
+        { month: 'Май', conducted: 34, hired: 7 },
+        { month: 'Июн', conducted: 29, hired: 5 },
+        { month: 'Июл', conducted: 25, hired: 4 },
+        { month: 'Авг', conducted: 38, hired: 9 },
+        { month: 'Сен', conducted: 41, hired: 10 },
+        { month: 'Окт', conducted: 36, hired: 8 },
+        { month: 'Ноя', conducted: 30, hired: 6 },
+        { month: 'Дек', conducted: 24, hired: 4 },
+    ],
+    roles: [
+        { label: 'Backend',       count: 24, color: '#EA580C' },
+        { label: 'Frontend',      count: 18, color: '#059669' },
+        { label: 'Тестирование',  count: 12, color: '#D97706' },
+        { label: 'Аналитика',     count:  9, color: '#2563EB' },
+        { label: 'Сопровождение', count:  8, color: '#DC2626' },
+        { label: 'DevOps',        count:  6, color: '#7C3AED' },
+        { label: 'PO / PL / DL',  count:  9, color: '#0891B2' },
+    ]
+};
+
+(function buildHeadcount() {
+    const vHired  = HC.vendor.reduce((s,c) => s + c.hired, 0);
+    const vSearch = HC.vendor.reduce((s,c) => s + c.searching, 0);
+    const staffTotal = HC.staff.hired + HC.staff.vacancy;
+
+    document.getElementById('hc-tribe-total').textContent  = staffTotal + vHired;
+    document.getElementById('hc-staff-hired').textContent  = HC.staff.hired;
+    document.getElementById('hc-staff-vacancy').textContent= HC.staff.vacancy;
+    document.getElementById('hc-vendor-hired').textContent = vHired;
+    document.getElementById('hc-staff-total').textContent  = staffTotal;
+    document.getElementById('hc-s-hired').textContent      = HC.staff.hired;
+    document.getElementById('hc-s-vacancy').textContent    = HC.staff.vacancy;
+    document.getElementById('hc-vendor-total').textContent = vHired + vSearch;
+    document.getElementById('hc-v-hired').textContent      = vHired;
+    document.getElementById('hc-v-searching').textContent  = vSearch;
+
+    const compEl = document.getElementById('hc-companies');
+    HC.vendor.forEach(c => {
+        const el = document.createElement('div');
+        el.className = 'company-row';
+        el.innerHTML = `<span class="company-name">${c.name}</span>
+            <div class="company-stats">
+                <span class="company-chip hired">${c.hired} <span class="chip-label">нанято</span></span>
+                <span class="company-chip searching">${c.searching} <span class="chip-label">в поиске</span></span>
+            </div>`;
+        compEl.appendChild(el);
+    });
+
+    const ivTotal = HC.interviews.reduce((s,m) => s + m.conducted, 0);
+    const ivHired = HC.interviews.reduce((s,m) => s + m.hired, 0);
+    document.getElementById('hc-iv-total').textContent = ivTotal;
+    document.getElementById('hc-iv-hired').textContent = ivHired;
+    document.getElementById('hc-iv-conv').textContent  = Math.round(ivHired / ivTotal * 100) + '%';
+
+    const rowsEl = document.getElementById('hc-iv-rows');
+    HC.interviews.forEach(m => {
+        const conv = Math.round(m.hired / m.conducted * 100);
+        const row = document.createElement('div');
+        row.className = 'iv-row';
+        row.innerHTML = `<span class="iv-month">${m.month}</span>
+            <span class="iv-num">${m.conducted}</span>
+            <span class="iv-num hired">${m.hired}</span>
+            <span class="iv-num conv">${conv}%</span>`;
+        rowsEl.appendChild(row);
+    });
+
+    const rolesEl = document.getElementById('hc-roles');
+    HC.roles.forEach(r => {
+        const item = document.createElement('div');
+        item.className = 'role-item';
+        item.innerHTML = `<span class="role-dot" style="background:${r.color}"></span>
+            <span class="role-label">${r.label}</span>
+            <span class="role-count">${r.count}</span>`;
+        rolesEl.appendChild(item);
+    });
 })();
 </script>
 </body>
