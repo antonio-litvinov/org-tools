@@ -385,6 +385,17 @@
         .iv-num.hired { color: var(--ds-accent-blue); }
         .iv-num.conv  { color: var(--ds-success); }
 
+        /* Interviews by role */
+        .iv-by-role { display: flex; flex-direction: column; gap: 2px; }
+        .iv-role-row {
+            display: grid; grid-template-columns: 16px 1fr 36px 36px 40px;
+            align-items: center; gap: 6px;
+            padding: 5px 8px; border-radius: var(--ds-radius-sm); font-size: 12px;
+        }
+        .iv-role-row:hover { background: var(--ds-bg-secondary); }
+        .iv-role-row.iv-role-header { color: var(--ds-text-muted); font-size: 11px; padding-bottom: 4px; margin-bottom: 2px; }
+        .iv-role-name { color: var(--ds-text-secondary); font-size: 12px; }
+
         /* Roles */
         .roles-list { display: flex; flex-direction: column; gap: 2px; }
         .role-item {
@@ -580,6 +591,10 @@
             <div class="section-header"><span class="section-name">По ролям</span></div>
             <div class="roles-list" id="hc-roles"></div>
         </div>
+        <div class="section-card" style="align-self:flex-start;min-width:240px">
+            <div class="section-header"><span class="section-name">Интервью по ролям</span></div>
+            <div class="iv-by-role" id="hc-iv-roles"></div>
+        </div>
     </div>
 
     <div class="bottom-section">
@@ -675,6 +690,12 @@ let DATA = {
         { label: 'Сопровождение', count:  8 },
         { label: 'DevOps',        count:  6 },
         { label: 'PO / PL / DL',  count:  9 },
+    ],
+    interviews_by_role: [
+        { label: 'Backend',      conducted: 87, hired: 24 },
+        { label: 'Frontend',     conducted: 65, hired: 18 },
+        { label: 'Тестирование', conducted: 42, hired: 12 },
+        { label: 'Аналитика',    conducted: 31, hired:  9 },
     ]
 };
 
@@ -819,6 +840,24 @@ function renderHeadcount() {
             <span class="role-label">${r.label}</span>
             <span class="role-count">${r.count}</span>
         </div>`).join('');
+
+    document.getElementById('hc-iv-roles').innerHTML = `
+        <div class="iv-role-row iv-role-header">
+            <span></span><span></span>
+            <span style="text-align:right">Инт.</span>
+            <span style="text-align:right;color:var(--ds-accent-blue)">Найм</span>
+            <span style="text-align:right;color:var(--ds-success)">Конв.</span>
+        </div>` +
+        DATA.interviews_by_role.map(r => {
+            const conv = r.conducted ? Math.round(r.hired / r.conducted * 100) : 0;
+            return `<div class="iv-role-row">
+                <span class="role-dot" style="background:${roleColor(r.label)}"></span>
+                <span class="iv-role-name">${r.label}</span>
+                <span class="iv-num">${r.conducted}</span>
+                <span class="iv-num hired">${r.hired}</span>
+                <span class="iv-num conv">${conv}%</span>
+            </div>`;
+        }).join('');
 }
 
 // ── Excel template download ────────────────────────────────────
@@ -864,6 +903,11 @@ function downloadTemplate() {
         ['Месяц', 'Провели', 'Наняли'],
         ...DATA.interviews.map(m => [m.month, m.conducted, m.hired])
     ]), 'Собеседования');
+
+    XLSX.utils.book_append_sheet(wb, mkSheet([
+        ['Роль', 'Провели', 'Наняли'],
+        ...DATA.interviews_by_role.map(r => [r.label, r.conducted, r.hired])
+    ]), 'Интервью_по_ролям');
 
     XLSX.writeFile(wb, 'dashboard-data.xlsx');
 }
@@ -928,6 +972,13 @@ function applyWorkbook(wb) {
     if (iv) {
         DATA.interviews = iv.slice(1).filter(r => r[0]).map(r => ({
             month: String(r[0]), conducted: +r[1] || 0, hired: +r[2] || 0
+        }));
+    }
+
+    const ivr = rows('Интервью_по_ролям');
+    if (ivr) {
+        DATA.interviews_by_role = ivr.slice(1).filter(r => r[0]).map(r => ({
+            label: String(r[0]), conducted: +r[1] || 0, hired: +r[2] || 0
         }));
     }
 }
