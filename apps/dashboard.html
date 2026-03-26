@@ -454,44 +454,33 @@
     <div class="metrics">
         <div class="metric-card">
             <span class="metric-label">Сотрудников</span>
-            <span class="metric-value">48</span>
-            <div class="metric-change">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                </svg>
-                <span>+3 новых</span>
-            </div>
+            <span class="metric-value" id="m-headcount">—</span>
+            <span class="metric-subtitle">нанято в трайбе</span>
         </div>
         <div class="metric-card">
-            <span class="metric-label">Выполнение плана</span>
-            <span class="metric-value">87%</span>
-            <div class="metric-change">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                </svg>
-                <span>+4.2%</span>
-            </div>
-        </div>
-        <div class="metric-card accent">
-            <span class="metric-label">Открытые задачи</span>
-            <span class="metric-value">23</span>
-            <span class="metric-subtitle">из 31 запланировано</span>
+            <span class="metric-label">Укомплектованность</span>
+            <span class="metric-value" id="m-staffing">—</span>
+            <span class="metric-subtitle" id="m-staffing-sub">—</span>
         </div>
         <div class="metric-card">
-            <span class="metric-label">Средний NPS</span>
-            <span class="metric-value">4.6</span>
-            <div class="metric-change">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                </svg>
-                <span>+0.3 к прошлому</span>
-            </div>
+            <span class="metric-label">Бюджет CAPEX</span>
+            <span class="metric-value">72 млн</span>
+            <span class="metric-subtitle">из 90 млн · 80%</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Бюджет RUN</span>
+            <span class="metric-value">118 млн</span>
+            <span class="metric-subtitle">лимит на год</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Бюджет Cloud</span>
+            <span class="metric-value">34 млн</span>
+            <span class="metric-subtitle">из 40 млн · 85%</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Бюджет ML Space</span>
+            <span class="metric-value">12 млн</span>
+            <span class="metric-subtitle">из 15 млн · 80%</span>
         </div>
     </div>
 
@@ -816,6 +805,14 @@ const HC = {
     const vHired  = HC.vendor.reduce((s,c) => s + c.hired, 0);
     const vSearch = HC.vendor.reduce((s,c) => s + c.searching, 0);
     const staffTotal = HC.staff.hired + HC.staff.vacancy;
+
+    // Top metric cards
+    const totalHired = HC.staff.hired + vHired;
+    const staffingPct = Math.round(HC.staff.hired / staffTotal * 100);
+    document.getElementById('m-headcount').textContent    = totalHired;
+    document.getElementById('m-staffing').textContent     = staffingPct + '%';
+    document.getElementById('m-staffing-sub').textContent =
+        `${HC.staff.hired} из ${staffTotal} штатных`;
 
     document.getElementById('hc-tribe-total').textContent  = staffTotal + vHired;
     document.getElementById('hc-staff-hired').textContent  = HC.staff.hired;
