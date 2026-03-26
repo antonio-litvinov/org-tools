@@ -247,7 +247,7 @@
 
         /* ─── BUDGET + INTERVIEWS ROW ─────────────────────────── */
         .budget-row { display: flex; gap: 20px; align-items: flex-start; }
-        .budget-row .bar-chart { flex: 1; min-width: 0; }
+        .budget-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
         .interviews-panel { width: 300px; flex-shrink: 0; }
 
         /* Goals panel — full width */
@@ -487,16 +487,54 @@
 
     <!-- Бюджет + Собеседования в одну строку -->
     <div class="budget-row">
-        <div class="bar-chart">
-            <div class="chart-header">
-                <div>
-                    <span class="chart-title">Бюджет · 2026</span>
-                    <div style="font-size:12px;color:var(--ds-text-muted);margin-top:3px">Лимит: 118 млн ₽ · остаток нарастающим итогом</div>
+        <div class="budget-left">
+            <div class="bar-chart">
+                <div class="chart-header">
+                    <div>
+                        <span class="chart-title">Бюджет · 2026</span>
+                        <div style="font-size:12px;color:var(--ds-text-muted);margin-top:3px">Лимит: 118 млн ₽ · остаток нарастающим итогом</div>
+                    </div>
+                    <span class="badge badge-red" id="db-budget-badge" style="display:none"></span>
                 </div>
-                <span class="badge badge-red" id="db-budget-badge" style="display:none"></span>
+                <div id="db-budget-root"></div>
             </div>
-            <div id="db-budget-root"></div>
+
+            <!-- Цели — той же ширины что бюджет -->
+            <div class="goals-panel">
+                <div class="goals-header">
+                    <span class="goals-title">Цели квартала</span>
+                    <span class="badge badge-blue">Q1 2026</span>
+                </div>
+                <div class="goals-divider"></div>
+                <div class="goals-list">
+                    <div class="goal-item">
+                        <span class="goal-label">Найм новых сотрудников</span>
+                        <span class="goal-status done">Выполнено</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Выполнение KPI</span>
+                        <span class="goal-status plan">В плане</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Цифровизация процессов</span>
+                        <span class="goal-status plan">В плане</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Снижение операционных затрат</span>
+                        <span class="goal-status risk">Риск</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Обучение команды</span>
+                        <span class="goal-status plan">В плане</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Запуск новой платформы</span>
+                        <span class="goal-status fail">Не выполнено</span>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div class="section-card interviews-panel">
             <div class="section-header"><span class="section-name">Собеседования</span></div>
             <div class="iv-summary">
@@ -523,41 +561,6 @@
                     <span class="iv-num conv">Конв.</span>
                 </div>
                 <div id="hc-iv-rows"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Цели — на всю ширину -->
-    <div class="goals-panel">
-        <div class="goals-header">
-            <span class="goals-title">Цели квартала</span>
-            <span class="badge badge-blue">Q1 2026</span>
-        </div>
-        <div class="goals-divider"></div>
-        <div class="goals-list">
-            <div class="goal-item">
-                <span class="goal-label">Найм новых сотрудников</span>
-                <span class="goal-status done">Выполнено</span>
-            </div>
-            <div class="goal-item">
-                <span class="goal-label">Выполнение KPI</span>
-                <span class="goal-status plan">В плане</span>
-            </div>
-            <div class="goal-item">
-                <span class="goal-label">Цифровизация процессов</span>
-                <span class="goal-status plan">В плане</span>
-            </div>
-            <div class="goal-item">
-                <span class="goal-label">Снижение операционных затрат</span>
-                <span class="goal-status risk">Риск</span>
-            </div>
-            <div class="goal-item">
-                <span class="goal-label">Обучение команды</span>
-                <span class="goal-status plan">В плане</span>
-            </div>
-            <div class="goal-item">
-                <span class="goal-label">Запуск новой платформы</span>
-                <span class="goal-status fail">Не выполнено</span>
             </div>
         </div>
     </div>
