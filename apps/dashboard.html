@@ -225,13 +225,7 @@
         .budget-month { flex: 1; text-align: center; font-size: 10px; color: var(--ds-text-muted); }
         .budget-month.over { color: var(--ds-error); font-weight: 600; }
 
-        .goals-panel {
-            width: 340px; flex-shrink: 0;
-            background: var(--ds-bg-card);
-            border-radius: var(--ds-radius-lg);
-            border: 1px solid var(--ds-border-light);
-            display: flex; flex-direction: column;
-        }
+        /* goals-panel — see .main-right .goals-panel above */
         .goals-header { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; }
         .goals-title { font-size: 16px; font-weight: 600; color: var(--ds-text-primary); }
         .goals-divider { height: 1px; background: var(--ds-border-light); }
@@ -253,6 +247,25 @@
         .goal-status.plan    { background: var(--ds-accent-blue-subtle); color: var(--ds-accent-blue); }
         .goal-status.risk    { background: var(--ds-warning-light); color: var(--ds-warning); }
         .goal-status.fail    { background: var(--ds-error-light); color: var(--ds-error); }
+
+        /* ─── MAIN GRID ───────────────────────────────────────── */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+            align-items: start;
+        }
+        .main-left  { display: flex; flex-direction: column; gap: 16px; }
+        .main-right { display: flex; flex-direction: column; gap: 16px; }
+
+        /* Goals panel — full width of right col */
+        .goals-panel {
+            width: auto;
+            background: var(--ds-bg-card);
+            border-radius: var(--ds-radius-lg);
+            border: 1px solid var(--ds-border-light);
+            display: flex; flex-direction: column;
+        }
 
         .bottom-section { display: flex; flex-direction: column; gap: 16px; }
         .bottom-header { display: flex; justify-content: space-between; align-items: center; }
@@ -488,122 +501,129 @@
         </div>
     </div>
 
-    <div class="charts-row">
-        <div class="bar-chart">
-            <div class="chart-header">
-                <div>
-                    <span class="chart-title">Бюджет · 2026</span>
-                    <div style="font-size:12px;color:var(--ds-text-muted);margin-top:3px">Лимит: 118 млн ₽ · остаток нарастающим итогом</div>
-                </div>
-                <span class="badge badge-red" id="db-budget-badge" style="display:none"></span>
-            </div>
-            <div id="db-budget-root"></div>
-        </div>
-        <div class="goals-panel">
-            <div class="goals-header">
-                <span class="goals-title">Цели квартала</span>
-                <span class="badge badge-blue">Q1 2026</span>
-            </div>
-            <div class="goals-divider"></div>
-            <div class="goals-list">
-                <div class="goal-item">
-                    <span class="goal-label">Найм новых сотрудников</span>
-                    <span class="goal-status done">Выполнено</span>
-                </div>
-                <div class="goal-item">
-                    <span class="goal-label">Выполнение KPI</span>
-                    <span class="goal-status plan">В плане</span>
-                </div>
-                <div class="goal-item">
-                    <span class="goal-label">Цифровизация процессов</span>
-                    <span class="goal-status plan">В плане</span>
-                </div>
-                <div class="goal-item">
-                    <span class="goal-label">Снижение операционных затрат</span>
-                    <span class="goal-status risk">Риск</span>
-                </div>
-                <div class="goal-item">
-                    <span class="goal-label">Обучение команды</span>
-                    <span class="goal-status plan">В плане</span>
-                </div>
-                <div class="goal-item">
-                    <span class="goal-label">Запуск новой платформы</span>
-                    <span class="goal-status fail">Не выполнено</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- ── Main 2-column grid ────────────────────────────────── -->
+    <div class="main-grid">
 
-    <!-- ── Headcount ─────────────────────────────────────────── -->
-    <div class="hc-section">
-        <div class="bottom-header">
-            <span class="bottom-title">Численность трайба</span>
-        </div>
+        <!-- LEFT: budget + headcount structural data -->
+        <div class="main-left">
 
-        <div class="tribe-card">
-            <span class="tribe-name">Трайб</span>
-            <span class="tribe-total" id="hc-tribe-total">—</span>
-            <div class="tribe-vdivider"></div>
-            <div class="tribe-formula">
-                <div class="tribe-formula-item">
-                    <span class="tribe-formula-value hired" id="hc-staff-hired">—</span>
-                    <span class="tribe-formula-label">штатных нанято</span>
-                </div>
-                <span class="tribe-plus">+</span>
-                <div class="tribe-formula-item">
-                    <span class="tribe-formula-value vacancy" id="hc-staff-vacancy">—</span>
-                    <span class="tribe-formula-label">штатных вакансий</span>
-                </div>
-                <span class="tribe-plus">+</span>
-                <div class="tribe-formula-item">
-                    <span class="tribe-formula-value vendor" id="hc-vendor-hired">—</span>
-                    <span class="tribe-formula-label">нанято в подряде</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="hc-sections-row">
-            <div class="section-card hc-card-fixed">
-                <div class="section-header">
-                    <span class="section-name">Штатные</span>
-                    <span class="section-badge" id="hc-staff-total">—</span>
-                </div>
-                <div class="stats-row">
-                    <div class="stat-block hired">
-                        <span class="stat-number" id="hc-s-hired">—</span>
-                        <span class="stat-label">нанятых</span>
+            <div class="bar-chart">
+                <div class="chart-header">
+                    <div>
+                        <span class="chart-title">Бюджет · 2026</span>
+                        <div style="font-size:12px;color:var(--ds-text-muted);margin-top:3px">Лимит: 118 млн ₽ · остаток нарастающим итогом</div>
                     </div>
-                    <div class="stat-block vacancy">
-                        <span class="stat-number" id="hc-s-vacancy">—</span>
-                        <span class="stat-label">вакансий</span>
+                    <span class="badge badge-red" id="db-budget-badge" style="display:none"></span>
+                </div>
+                <div id="db-budget-root"></div>
+            </div>
+
+            <div class="bottom-header" style="margin-top:4px">
+                <span class="bottom-title">Численность трайба</span>
+            </div>
+
+            <div class="tribe-card">
+                <span class="tribe-name">Трайб</span>
+                <span class="tribe-total" id="hc-tribe-total">—</span>
+                <div class="tribe-vdivider"></div>
+                <div class="tribe-formula">
+                    <div class="tribe-formula-item">
+                        <span class="tribe-formula-value hired" id="hc-staff-hired">—</span>
+                        <span class="tribe-formula-label">штатных нанято</span>
+                    </div>
+                    <span class="tribe-plus">+</span>
+                    <div class="tribe-formula-item">
+                        <span class="tribe-formula-value vacancy" id="hc-staff-vacancy">—</span>
+                        <span class="tribe-formula-label">штатных вакансий</span>
+                    </div>
+                    <span class="tribe-plus">+</span>
+                    <div class="tribe-formula-item">
+                        <span class="tribe-formula-value vendor" id="hc-vendor-hired">—</span>
+                        <span class="tribe-formula-label">нанято в подряде</span>
                     </div>
                 </div>
             </div>
-            <div class="section-card hc-card-fixed">
-                <div class="section-header">
-                    <span class="section-name">Вендор</span>
-                    <span class="section-badge" id="hc-vendor-total">—</span>
-                </div>
-                <div class="stats-row">
-                    <div class="stat-block hired">
-                        <span class="stat-number" id="hc-v-hired">—</span>
-                        <span class="stat-label">нанятых</span>
+
+            <!-- Staff + Vendor + Companies in one row -->
+            <div style="display:flex;gap:16px;align-items:flex-start">
+                <div class="section-card hc-card-fixed">
+                    <div class="section-header">
+                        <span class="section-name">Штатные</span>
+                        <span class="section-badge" id="hc-staff-total">—</span>
                     </div>
-                    <div class="stat-block searching">
-                        <span class="stat-number" id="hc-v-searching">—</span>
-                        <span class="stat-label">в поиске</span>
+                    <div class="stats-row">
+                        <div class="stat-block hired">
+                            <span class="stat-number" id="hc-s-hired">—</span>
+                            <span class="stat-label">нанятых</span>
+                        </div>
+                        <div class="stat-block vacancy">
+                            <span class="stat-number" id="hc-s-vacancy">—</span>
+                            <span class="stat-label">вакансий</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-card hc-card-fixed">
+                    <div class="section-header">
+                        <span class="section-name">Вендор</span>
+                        <span class="section-badge" id="hc-vendor-total">—</span>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-block hired">
+                            <span class="stat-number" id="hc-v-hired">—</span>
+                            <span class="stat-label">нанятых</span>
+                        </div>
+                        <div class="stat-block searching">
+                            <span class="stat-number" id="hc-v-searching">—</span>
+                            <span class="stat-label">в поиске</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-card" style="flex:1">
+                    <div class="section-header"><span class="section-name">Декомпозиция вендора</span></div>
+                    <div class="companies-list" id="hc-companies"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT: goals + interviews + roles -->
+        <div class="main-right">
+
+            <div class="goals-panel">
+                <div class="goals-header">
+                    <span class="goals-title">Цели квартала</span>
+                    <span class="badge badge-blue">Q1 2026</span>
+                </div>
+                <div class="goals-divider"></div>
+                <div class="goals-list">
+                    <div class="goal-item">
+                        <span class="goal-label">Найм новых сотрудников</span>
+                        <span class="goal-status done">Выполнено</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Выполнение KPI</span>
+                        <span class="goal-status plan">В плане</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Цифровизация процессов</span>
+                        <span class="goal-status plan">В плане</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Снижение операционных затрат</span>
+                        <span class="goal-status risk">Риск</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Обучение команды</span>
+                        <span class="goal-status plan">В плане</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-label">Запуск новой платформы</span>
+                        <span class="goal-status fail">Не выполнено</span>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="section-card companies-card">
-            <div class="section-header"><span class="section-name">Декомпозиция вендора</span></div>
-            <div class="companies-list" id="hc-companies"></div>
-        </div>
-
-        <div class="hc-bottom-row">
-            <div class="section-card" style="align-self:flex-start;min-width:280px">
+            <div class="section-card">
                 <div class="section-header"><span class="section-name">Собеседования</span></div>
                 <div class="iv-summary">
                     <div class="iv-metric">
@@ -631,10 +651,12 @@
                     <div id="hc-iv-rows"></div>
                 </div>
             </div>
-            <div class="section-card" style="align-self:flex-start;min-width:220px">
+
+            <div class="section-card">
                 <div class="section-header"><span class="section-name">По ролям</span></div>
                 <div class="roles-list" id="hc-roles"></div>
             </div>
+
         </div>
     </div>
 
