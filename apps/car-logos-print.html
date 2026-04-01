@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Логотипы автомобилей — для печати</title>
+<style>
+  @page { size: A4 portrait; margin: 8mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: white; font-family: Arial, sans-serif; }
+
+  .page {
+    width: 194mm;
+    height: 281mm;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 4mm;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: avoid; }
+
+  .cell {
+    border: 1.5px dashed #bbb;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4mm 3mm 3mm;
+  }
+  .cell svg {
+    width: 68mm;
+    height: 44mm;
+  }
+  .brand {
+    font-size: 13pt;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #222;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE 1 ===== -->
+<div class="page">
+
+  <!-- 1. BMW -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="65" r="58" fill="#1c69d4"/>
+      <circle cx="100" cy="65" r="48" fill="white"/>
+      <!-- quarters -->
+      <path d="M100,17 A48,48 0 0,1 148,65 L100,65 Z" fill="#1c69d4"/>
+      <path d="M100,113 A48,48 0 0,1 52,65 L100,65 Z" fill="#1c69d4"/>
+      <!-- outer ring -->
+      <circle cx="100" cy="65" r="58" fill="none" stroke="#1c69d4" stroke-width="10"/>
+      <circle cx="100" cy="65" r="48" fill="none" stroke="white" stroke-width="3"/>
+      <!-- BMW text -->
+      <text x="100" y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1c69d4" font-family="Arial">BMW</text>
+    </svg>
+    <div class="brand">BMW</div>
+  </div>
+
+  <!-- 2. Mercedes-Benz -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="65" r="58" fill="white" stroke="#999" stroke-width="4"/>
+      <!-- three-pointed star -->
+      <polygon points="100,10 112,55 158,70 112,85 100,120 88,85 42,70 88,55" fill="none"/>
+      <!-- star arms -->
+      <line x1="100" y1="20" x2="100" y2="65" stroke="#888" stroke-width="8" stroke-linecap="round"/>
+      <line x1="100" y1="65" x2="148" y2="95" stroke="#888" stroke-width="8" stroke-linecap="round"/>
+      <line x1="100" y1="65" x2="52" y2="95" stroke="#888" stroke-width="8" stroke-linecap="round"/>
+      <!-- center circle -->
+      <circle cx="100" cy="65" r="7" fill="#888"/>
+      <!-- outer ring -->
+      <circle cx="100" cy="65" r="55" fill="none" stroke="#888" stroke-width="5"/>
+    </svg>
+    <div class="brand">Mercedes-Benz</div>
+  </div>
+
+  <!-- 3. Volkswagen -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="65" r="58" fill="#003087"/>
+      <!-- VW letters -->
+      <!-- V part -->
+      <path d="M78,35 L93,72 L100,55 L107,72 L122,35" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- W part -->
+      <path d="M70,58 L82,88 L100,72 L118,88 L130,58" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- horizontal divider -->
+      <line x1="68" y1="57" x2="132" y2="57" stroke="white" stroke-width="3"/>
+      <!-- outer border -->
+      <circle cx="100" cy="65" r="58" fill="none" stroke="white" stroke-width="4"/>
+    </svg>
+    <div class="brand">Volkswagen</div>
+  </div>
+
+  <!-- 4. Audi -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- four rings -->
+      <circle cx="42" cy="65" r="28" fill="none" stroke="#c0c0c0" stroke-width="8"/>
+      <circle cx="88" cy="65" r="28" fill="none" stroke="#c0c0c0" stroke-width="8"/>
+      <circle cx="134" cy="65" r="28" fill="none" stroke="#c0c0c0" stroke-width="8"/>
+      <!-- white overlaps to create interlocking effect -->
+      <path d="M60,37 Q65,65 60,93" fill="none" stroke="white" stroke-width="10"/>
+      <path d="M106,37 Q111,65 106,93" fill="none" stroke="white" stroke-width="10"/>
+      <circle cx="42" cy="65" r="28" fill="none" stroke="#888" stroke-width="7"/>
+      <circle cx="88" cy="65" r="28" fill="none" stroke="#888" stroke-width="7"/>
+      <circle cx="134" cy="65" r="28" fill="none" stroke="#888" stroke-width="7"/>
+      <circle cx="180" cy="65" r="28" fill="none" stroke="#888" stroke-width="7"/>
+      <!-- white overlaps -->
+      <path d="M60,37 Q55,65 60,93" fill="none" stroke="white" stroke-width="9"/>
+      <path d="M106,37 Q101,65 106,93" fill="none" stroke="white" stroke-width="9"/>
+      <path d="M152,37 Q147,65 152,93" fill="none" stroke="white" stroke-width="9"/>
+    </svg>
+    <div class="brand">Audi</div>
+  </div>
+
+  <!-- 5. Toyota -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- background -->
+      <rect x="0" y="0" width="200" height="130" fill="white"/>
+      <!-- Toyota ellipse logo -->
+      <!-- outer ellipse -->
+      <ellipse cx="100" cy="65" rx="78" ry="50" fill="none" stroke="#EB0A1E" stroke-width="9"/>
+      <!-- left part of T -->
+      <ellipse cx="83" cy="65" rx="28" ry="37" fill="none" stroke="#EB0A1E" stroke-width="9"/>
+      <!-- right overlap ellipse -->
+      <ellipse cx="117" cy="65" rx="28" ry="37" fill="none" stroke="#EB0A1E" stroke-width="9"/>
+      <!-- Cover overlapping lines with white -->
+      <rect x="85" y="28" width="30" height="74" fill="white"/>
+      <!-- Redraw center vertical -->
+      <ellipse cx="83" cy="65" rx="28" ry="37" fill="none" stroke="#EB0A1E" stroke-width="9"/>
+      <ellipse cx="117" cy="65" rx="28" ry="37" fill="none" stroke="#EB0A1E" stroke-width="9"/>
+    </svg>
+    <div class="brand">Toyota</div>
+  </div>
+
+  <!-- 6. Honda -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Red H wing logo -->
+      <rect x="20" y="20" width="160" height="90" rx="8" fill="#CC0000"/>
+      <!-- H letter stylized -->
+      <!-- left vertical -->
+      <rect x="52" y="30" width="20" height="70" rx="3" fill="white"/>
+      <!-- right vertical -->
+      <rect x="128" y="30" width="20" height="70" rx="3" fill="white"/>
+      <!-- crossbar -->
+      <rect x="52" y="57" width="96" height="18" rx="3" fill="white"/>
+    </svg>
+    <div class="brand">Honda</div>
+  </div>
+
+  <!-- 7. Ford -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="65" rx="92" ry="55" fill="#003499"/>
+      <ellipse cx="100" cy="65" rx="88" ry="51" fill="none" stroke="#6DA9E4" stroke-width="3"/>
+      <text x="100" y="80" text-anchor="middle" font-size="46" font-weight="bold" fill="white" font-family="'Times New Roman', serif" font-style="italic">Ford</text>
+    </svg>
+    <div class="brand">Ford</div>
+  </div>
+
+  <!-- 8. Chevrolet -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Gold bowtie -->
+      <!-- left part -->
+      <path d="M10,45 L80,45 L80,58 L35,58 L35,72 L10,72 Z" fill="#D4AF37" stroke="white" stroke-width="3"/>
+      <!-- middle gap (white) -->
+      <rect x="80" y="45" width="40" height="27" fill="white"/>
+      <!-- right part -->
+      <path d="M120,45 L190,45 L190,72 L165,72 L165,58 L120,58 Z" fill="#D4AF37" stroke="white" stroke-width="3"/>
+      <!-- stroke outline -->
+      <path d="M10,45 L80,45 L80,58 L35,58 L35,72 L10,72 Z" fill="none" stroke="#B8860B" stroke-width="2"/>
+      <path d="M120,45 L190,45 L190,72 L165,72 L165,58 L120,58 Z" fill="none" stroke="#B8860B" stroke-width="2"/>
+      <text x="100" y="105" text-anchor="middle" font-size="11" fill="#555" font-family="Arial" letter-spacing="2">CHEVROLET</text>
+    </svg>
+    <div class="brand">Chevrolet</div>
+  </div>
+
+</div><!-- end page 1 -->
+
+<!-- ===== PAGE 2 ===== -->
+<div class="page">
+
+  <!-- 9. Nissan -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="65" r="58" fill="white" stroke="#C0392B" stroke-width="6"/>
+      <!-- horizontal bar -->
+      <rect x="25" y="54" width="150" height="22" fill="#C0392B"/>
+      <text x="100" y="71" text-anchor="middle" font-size="15" font-weight="bold" fill="white" font-family="Arial" letter-spacing="3">NISSAN</text>
+    </svg>
+    <div class="brand">Nissan</div>
+  </div>
+
+  <!-- 10. Hyundai -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="65" rx="88" ry="58" fill="#002C5F"/>
+      <!-- stylized H -->
+      <text x="100" y="86" text-anchor="middle" font-size="72" font-weight="bold" fill="white" font-family="Arial" font-style="italic">H</text>
+    </svg>
+    <div class="brand">Hyundai</div>
+  </div>
+
+  <!-- 11. Kia -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="20" width="190" height="90" rx="12" fill="white"/>
+      <!-- KIA stylized text -->
+      <!-- K -->
+      <line x1="38" y1="35" x2="38" y2="95" stroke="#BB0000" stroke-width="9" stroke-linecap="round"/>
+      <line x1="38" y1="65" x2="62" y2="35" stroke="#BB0000" stroke-width="9" stroke-linecap="round"/>
+      <line x1="38" y1="65" x2="62" y2="95" stroke="#BB0000" stroke-width="9" stroke-linecap="round"/>
+      <!-- I (no serifs — oval shape of Kia I) -->
+      <ellipse cx="100" cy="65" rx="10" ry="30" fill="none" stroke="#BB0000" stroke-width="8"/>
+      <!-- A -->
+      <line x1="138" y1="95" x2="158" y2="35" stroke="#BB0000" stroke-width="9" stroke-linecap="round"/>
+      <line x1="158" y1="35" x2="178" y2="95" stroke="#BB0000" stroke-width="9" stroke-linecap="round"/>
+      <line x1="143" y1="72" x2="173" y2="72" stroke="#BB0000" stroke-width="8"/>
+    </svg>
+    <div class="brand">Kia</div>
+  </div>
+
+  <!-- 12. Ferrari -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Yellow shield -->
+      <path d="M100,5 L165,20 L165,80 Q165,115 100,128 Q35,115 35,80 L35,20 Z" fill="#FFD700" stroke="#000" stroke-width="3"/>
+      <!-- top stripe: Italian flag colors -->
+      <rect x="35" y="20" width="43" height="16" fill="#009246"/>
+      <rect x="78" y="20" width="44" height="16" fill="white"/>
+      <rect x="122" y="20" width="43" height="16" fill="#CE2B37"/>
+      <!-- prancing horse (simplified) -->
+      <!-- body -->
+      <ellipse cx="100" cy="75" rx="18" ry="22" fill="#000" transform="rotate(-15,100,75)"/>
+      <!-- head -->
+      <ellipse cx="110" cy="52" rx="10" ry="8" fill="#000" transform="rotate(-10,110,52)"/>
+      <!-- neck -->
+      <rect x="101" y="54" width="10" height="18" fill="#000" transform="rotate(-10,106,63)"/>
+      <!-- legs -->
+      <rect x="85" y="88" width="7" height="20" rx="3" fill="#000" transform="rotate(10,88,98)"/>
+      <rect x="98" y="90" width="7" height="20" rx="3" fill="#000"/>
+      <rect x="108" y="88" width="7" height="20" rx="3" fill="#000" transform="rotate(-10,111,98)"/>
+      <!-- tail -->
+      <path d="M82,70 Q60,60 55,40" fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+      <!-- FERRARI text -->
+      <text x="100" y="120" text-anchor="middle" font-size="9" font-weight="bold" fill="#000" font-family="Arial" letter-spacing="2">FERRARI</text>
+    </svg>
+    <div class="brand">Ferrari</div>
+  </div>
+
+  <!-- 13. Lamborghini -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Black shield -->
+      <path d="M100,5 L170,25 L170,80 Q170,118 100,128 Q30,118 30,80 L30,25 Z" fill="#1a1a1a" stroke="#D4AF37" stroke-width="3"/>
+      <!-- Gold bull (simplified) -->
+      <!-- body -->
+      <ellipse cx="100" cy="78" rx="22" ry="16" fill="#D4AF37"/>
+      <!-- head -->
+      <circle cx="122" cy="65" r="12" fill="#D4AF37"/>
+      <!-- horns -->
+      <path d="M115,57 Q108,38 98,42" fill="none" stroke="#D4AF37" stroke-width="5" stroke-linecap="round"/>
+      <path d="M128,57 Q135,38 145,42" fill="none" stroke="#D4AF37" stroke-width="5" stroke-linecap="round"/>
+      <!-- legs -->
+      <rect x="83" y="88" width="8" height="22" rx="4" fill="#D4AF37"/>
+      <rect x="96" y="90" width="8" height="22" rx="4" fill="#D4AF37"/>
+      <rect x="109" y="88" width="8" height="22" rx="4" fill="#D4AF37"/>
+      <!-- tail -->
+      <path d="M78,78 Q55,65 58,48" fill="none" stroke="#D4AF37" stroke-width="5" stroke-linecap="round"/>
+      <!-- top text -->
+      <text x="100" y="24" text-anchor="middle" font-size="8" font-weight="bold" fill="#D4AF37" font-family="Arial" letter-spacing="1">AUTOMOBILI</text>
+      <text x="100" y="34" text-anchor="middle" font-size="8" font-weight="bold" fill="#D4AF37" font-family="Arial" letter-spacing="1">LAMBORGHINI</text>
+    </svg>
+    <div class="brand">Lamborghini</div>
+  </div>
+
+  <!-- 14. Porsche -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Crest -->
+      <path d="M100,5 L170,30 L170,95 Q170,120 100,128 Q30,120 30,95 L30,30 Z" fill="white" stroke="#888" stroke-width="2"/>
+      <!-- center vertical line -->
+      <line x1="100" y1="5" x2="100" y2="128" stroke="#888" stroke-width="2"/>
+      <!-- horizontal line -->
+      <line x1="30" y1="67" x2="170" y2="67" stroke="#888" stroke-width="2"/>
+      <!-- Porsche antlers (horse silhouette simplified) -->
+      <!-- top center: horse head zone -->
+      <rect x="70" y="10" width="60" height="55" rx="4" fill="#D4AF37"/>
+      <!-- horse (very simplified) -->
+      <ellipse cx="100" cy="42" rx="15" ry="18" fill="#333"/>
+      <ellipse cx="100" cy="22" rx="9" ry="8" fill="#333"/>
+      <path d="M94,27 L92,14" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+      <path d="M106,27 L108,14" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+      <!-- red/black stripes (left) -->
+      <rect x="30" y="30" width="35" height="17" rx="2" fill="#CC0000"/>
+      <rect x="30" y="67" width="35" height="17" rx="2" fill="#CC0000"/>
+      <!-- red/black stripes (right) -->
+      <rect x="135" y="30" width="35" height="17" rx="2" fill="#CC0000"/>
+      <rect x="135" y="67" width="35" height="17" rx="2" fill="#CC0000"/>
+      <!-- PORSCHE text -->
+      <text x="100" y="120" text-anchor="middle" font-size="10" font-weight="bold" fill="#333" font-family="Arial" letter-spacing="2">PORSCHE</text>
+    </svg>
+    <div class="brand">Porsche</div>
+  </div>
+
+  <!-- 15. Subaru -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background star cluster (Pleiades) -->
+      <!-- large star (left) -->
+      <circle cx="72" cy="65" r="22" fill="#0047AB"/>
+      <!-- 5 small stars -->
+      <circle cx="110" cy="38" r="13" fill="#0047AB"/>
+      <circle cx="135" cy="55" r="10" fill="#0047AB"/>
+      <circle cx="138" cy="80" r="9" fill="#0047AB"/>
+      <circle cx="118" cy="95" r="10" fill="#0047AB"/>
+      <circle cx="100" cy="68" r="8" fill="#0047AB"/>
+    </svg>
+    <div class="brand">Subaru</div>
+  </div>
+
+  <!-- 16. Mazda -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mazda wing M -->
+      <!-- Wing shape made of two ovals -->
+      <ellipse cx="85" cy="65" rx="50" ry="32" fill="#CC0000" transform="rotate(-15,85,65)"/>
+      <ellipse cx="115" cy="65" rx="50" ry="32" fill="#CC0000" transform="rotate(15,115,65)"/>
+      <!-- white center cover -->
+      <ellipse cx="100" cy="65" rx="25" ry="30" fill="white"/>
+      <!-- M shape cut out -->
+      <path d="M88,50 L100,72 L112,50" fill="white" stroke="white" stroke-width="2"/>
+      <!-- MAZDA text -->
+      <text x="100" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#333" font-family="Arial" letter-spacing="3">MAZDA</text>
+    </svg>
+    <div class="brand">Mazda</div>
+  </div>
+
+</div><!-- end page 2 -->
+
+<!-- ===== PAGE 3 ===== -->
+<div class="page">
+
+  <!-- 17. Volvo -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Circle with arrow (Mars/iron symbol) -->
+      <circle cx="90" cy="70" r="48" fill="none" stroke="#003E87" stroke-width="9"/>
+      <!-- diagonal arrow line -->
+      <line x1="128" y1="32" x2="170" y2="20" stroke="#003E87" stroke-width="9" stroke-linecap="round"/>
+      <!-- arrowhead -->
+      <polygon points="170,20 148,18 168,38" fill="#003E87"/>
+      <!-- VOLVO text across circle -->
+      <text x="90" y="77" text-anchor="middle" font-size="22" font-weight="bold" fill="#003E87" font-family="Arial">VOLVO</text>
+    </svg>
+    <div class="brand">Volvo</div>
+  </div>
+
+  <!-- 18. Peugeot -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shield -->
+      <path d="M100,5 L155,30 L155,85 Q155,118 100,128 Q45,118 45,85 L45,30 Z" fill="#003087" stroke="#333" stroke-width="2"/>
+      <!-- Lion (simplified) -->
+      <!-- body -->
+      <ellipse cx="100" cy="85" rx="25" ry="20" fill="#D4AF37"/>
+      <!-- head -->
+      <circle cx="100" cy="55" r="20" fill="#D4AF37"/>
+      <!-- mane -->
+      <circle cx="100" cy="55" r="26" fill="none" stroke="#B8860B" stroke-width="8"/>
+      <!-- face markings -->
+      <circle cx="93" cy="50" r="3" fill="#333"/>
+      <circle cx="107" cy="50" r="3" fill="#333"/>
+      <path d="M95,60 Q100,65 105,60" fill="none" stroke="#333" stroke-width="2"/>
+      <!-- legs -->
+      <rect x="82" y="98" width="10" height="22" rx="5" fill="#D4AF37"/>
+      <rect x="108" y="98" width="10" height="22" rx="5" fill="#D4AF37"/>
+      <!-- tail -->
+      <path d="M125,80 Q148,70 145,52" fill="none" stroke="#D4AF37" stroke-width="6" stroke-linecap="round"/>
+      <ellipse cx="145" cy="48" rx="8" ry="6" fill="#D4AF37"/>
+    </svg>
+    <div class="brand">Peugeot</div>
+  </div>
+
+  <!-- 19. Renault -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Yellow diamond/rhombus -->
+      <polygon points="100,8 162,65 100,122 38,65" fill="#FFD100"/>
+      <!-- inner hollow diamond -->
+      <polygon points="100,24 146,65 100,106 54,65" fill="white"/>
+      <!-- inner inner diamond -->
+      <polygon points="100,40 130,65 100,90 70,65" fill="#FFD100"/>
+      <!-- border -->
+      <polygon points="100,8 162,65 100,122 38,65" fill="none" stroke="#E5B800" stroke-width="3"/>
+    </svg>
+    <div class="brand">Renault</div>
+  </div>
+
+  <!-- 20. Jeep -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Dark background rectangle -->
+      <rect x="10" y="15" width="180" height="100" rx="10" fill="#1a1a1a"/>
+      <!-- Jeep text -->
+      <text x="100" y="78" text-anchor="middle" font-size="44" font-weight="bold" fill="white" font-family="Arial" letter-spacing="2">JEEP</text>
+      <!-- 7-slot grille below -->
+      <rect x="32" y="88" width="14" height="18" rx="7" fill="#555"/>
+      <rect x="52" y="88" width="14" height="18" rx="7" fill="#555"/>
+      <rect x="72" y="88" width="14" height="18" rx="7" fill="#555"/>
+      <rect x="92" y="88" width="14" height="18" rx="7" fill="#555"/>
+      <rect x="112" y="88" width="14" height="18" rx="7" fill="#555"/>
+      <rect x="132" y="88" width="14" height="18" rx="7" fill="#555"/>
+      <rect x="152" y="88" width="14" height="18" rx="7" fill="#555"/>
+    </svg>
+    <div class="brand">Jeep</div>
+  </div>
+
+  <!-- 21. Skoda -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Green circle -->
+      <circle cx="100" cy="65" r="56" fill="#4BA82E"/>
+      <!-- Arrow/wing (stylized S) -->
+      <!-- white arrow/feather shape -->
+      <path d="M100,65 C80,40 55,40 45,55 C55,50 75,58 85,75 Z" fill="white"/>
+      <path d="M100,65 C120,40 145,40 155,55 C145,50 125,58 115,75 Z" fill="white"/>
+      <!-- center circle -->
+      <circle cx="100" cy="65" r="12" fill="white"/>
+      <circle cx="100" cy="65" r="6" fill="#4BA82E"/>
+      <!-- outer ring -->
+      <circle cx="100" cy="65" r="56" fill="none" stroke="#2d7a18" stroke-width="4"/>
+    </svg>
+    <div class="brand">Škoda</div>
+  </div>
+
+  <!-- 22. Lada (ВАЗ) -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Boat/ship shape (LADA logo) -->
+      <!-- Outer circle -->
+      <circle cx="100" cy="65" r="55" fill="#CC0000"/>
+      <!-- Boat hull shape -->
+      <path d="M45,80 Q100,30 155,80 Q100,100 45,80 Z" fill="white"/>
+      <!-- Mast -->
+      <line x1="100" y1="35" x2="100" y2="80" stroke="white" stroke-width="4"/>
+      <!-- Sail -->
+      <path d="M100,38 L135,75 L100,75 Z" fill="#CC0000"/>
+      <!-- LADA text -->
+      <text x="100" y="115" text-anchor="middle" font-size="16" font-weight="bold" fill="white" font-family="Arial" letter-spacing="3">LADA</text>
+    </svg>
+    <div class="brand">Lada</div>
+  </div>
+
+  <!-- 23. Tesla -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tesla T logo -->
+      <!-- top arc -->
+      <path d="M35,40 Q100,15 165,40" fill="none" stroke="#CC0000" stroke-width="8" stroke-linecap="round"/>
+      <!-- left arc of T crossbar -->
+      <path d="M35,40 Q55,40 70,55" fill="none" stroke="#CC0000" stroke-width="8" stroke-linecap="round"/>
+      <!-- right arc of T crossbar -->
+      <path d="M165,40 Q145,40 130,55" fill="none" stroke="#CC0000" stroke-width="8" stroke-linecap="round"/>
+      <!-- vertical stem -->
+      <line x1="100" y1="40" x2="100" y2="115" stroke="#CC0000" stroke-width="8" stroke-linecap="round"/>
+      <!-- TESLA text -->
+      <text x="100" y="122" text-anchor="middle" font-size="13" font-weight="bold" fill="#333" font-family="Arial" letter-spacing="4">TESLA</text>
+    </svg>
+    <div class="brand">Tesla</div>
+  </div>
+
+  <!-- 24. Land Rover -->
+  <div class="cell">
+    <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Green oval -->
+      <ellipse cx="100" cy="65" rx="90" ry="50" fill="#005A28"/>
+      <!-- LAND ROVER text -->
+      <text x="100" y="57" text-anchor="middle" font-size="17" font-weight="bold" fill="white" font-family="Arial" letter-spacing="1">LAND</text>
+      <text x="100" y="80" text-anchor="middle" font-size="17" font-weight="bold" fill="white" font-family="Arial" letter-spacing="1">ROVER</text>
+    </svg>
+    <div class="brand">Land Rover</div>
+  </div>
+
+</div><!-- end page 3 -->
+
+</body>
+</html>
